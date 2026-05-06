@@ -164,15 +164,15 @@ export default function LandingPage() {
                         <h2 className="text-[28px] md:text-[36px] font-bold text-white leading-tight mb-12">
                             Measuring Our <span className="text-brand-yellow">Impact</span> Across <br className="hidden md:block" /> the Continent.
                         </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-2.5 md:gap-4">
                             {[
                                 { val: "50k+", sub: "Youths reached" },
                                 { val: "120+", sub: "Project Delivered" },
                                 { val: "18+", sub: "Countries Reached" }
                             ].map((stat, i) => (
-                                <div key={i} className="bg-white/5 border border-white/5 p-6 rounded-xl hover:bg-white/10 transition-colors">
-                                    <h3 className="text-2xl font-bold text-brand-yellow mb-2">{stat.val}</h3>
-                                    <p className="text-[9px] font-prompt font-medium uppercase tracking-widest text-white/30 whitespace-nowrap">{stat.sub}</p>
+                                <div key={i} className="bg-white/5 border border-white/5 p-4 md:p-6 rounded-xl hover:bg-white/10 transition-colors flex flex-col justify-center items-center text-center">
+                                    <h3 className="text-lg md:text-2xl font-bold text-brand-yellow mb-1 md:mb-2">{stat.val}</h3>
+                                    <p className="text-[7px] md:text-[9px] font-prompt font-medium uppercase tracking-widest text-white/30 leading-tight">{stat.sub}</p>
                                 </div>
                             ))}
                         </div>
@@ -194,19 +194,19 @@ export default function LandingPage() {
                     </div>
                     <div className="lg:col-span-5 flex flex-col gap-4">
                         {[
-                            { label: "ADVERTISE WITH US", sub: "Reach pan-African & diaspora audiences" },
-                            { label: "PARTNER WITH US", sub: "Advocacy, campaigns & media production" },
+                            { label: "ADVERTISE WITH GTV AFRIK", sub: "Reach Africa's decision makers & global diaspora" },
+                            { label: "PARTNER WITH US", sub: "Advocacy, Campaigns & Media Production" },
                             { label: "BOOK AN APPOINTMENT", sub: "Talk to our team about your goals" }
                         ].map((link, i) => (
-                            <div key={i} className="bg-white/10 border border-white/5 p-6 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl">
-                                <div className="flex items-center gap-6">
-                                    <div className="w-16 h-12 bg-gray-300/20 rounded-md shrink-0"></div>
+                            <div key={i} className="bg-white/10 border border-white/5 p-5 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl">
+                                <div className="flex items-center gap-4 md:gap-6">
+                                    <div className="w-12 md:w-16 h-10 md:h-12 bg-gray-300/20 rounded-md shrink-0"></div>
                                     <div>
                                         <h4 className="text-[10px] md:text-[11px] font-bold text-white uppercase tracking-widest">{link.label}</h4>
-                                        <p className="text-[8px] md:text-[9px] font-prompt text-white/40 uppercase tracking-widest mt-1">{link.sub}</p>
+                                        <p className="text-[9px] md:text-[10px] font-prompt text-white/50 mt-1.5 leading-relaxed">{link.sub}</p>
                                     </div>
                                 </div>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform opacity-30">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform opacity-30 shrink-0">
                                     <path d="M9 18l6-6-6-6" />
                                 </svg>
                             </div>

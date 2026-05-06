@@ -102,23 +102,23 @@ export default function BlogPage() {
             <section className="px-6 md:px-16 py-16 md:py-28 bg-[#F8F9FF]">
                 <SectionHeader title="Breaking News" />
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
-                    <div className="md:col-span-5 bg-white border border-gray-100 overflow-hidden rounded-2xl shadow-sm">
-                        <div className="aspect-video bg-brand-vibrant-blue relative p-4">
-                            <span className="bg-[#D42027] text-white text-[8px] px-3 py-1 rounded-sm font-bold uppercase tracking-widest font-prompt">Breaking News</span>
+                    <div className="md:col-span-4 bg-white border border-gray-100 overflow-hidden rounded-2xl shadow-sm flex flex-col h-full">
+                        <div className="aspect-[4/3] bg-brand-vibrant-blue relative p-5">
+                            <span className="bg-[#D42027] text-white text-[9px] px-4 py-1.5 rounded-full font-bold uppercase tracking-widest font-prompt shadow-lg">Breaking News</span>
                         </div>
-                        <div className="p-6 md:p-10">
-                            <h3 className="text-[18px] md:text-[20px] font-bold text-brand-dark-navy mb-4 leading-snug">Rethinking Travel in a Warming World</h3>
-                            <p className="text-gray-400 text-[9px] font-bold uppercase tracking-widest font-prompt">Climate • 2 days ago</p>
+                        <div className="p-8 md:p-10 flex-1 flex flex-col justify-center">
+                            <h3 className="text-[20px] md:text-[22px] font-bold text-brand-dark-navy mb-5 leading-tight">Rethinking Travel in a Warming World</h3>
+                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest font-prompt">Climate • 2 days ago</p>
                         </div>
                     </div>
 
-                    <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-8">
+                    <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-14 gap-y-10">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
-                            <div key={i} className="flex gap-4 group cursor-pointer">
-                                <div className="w-16 h-16 md:w-20 md:h-20 bg-gray-300 rounded-xl shrink-0 group-hover:scale-95 transition-transform"></div>
+                            <div key={i} className="flex gap-3 group cursor-pointer border-b border-gray-100 pb-8">
+                                <div className="w-16 h-16 md:w-24 md:h-24 bg-gray-200 rounded-xl shrink-0 group-hover:scale-95 transition-transform"></div>
                                 <div className="flex flex-col justify-center">
-                                    <span className="text-brand-vibrant-blue font-bold text-[8px] uppercase tracking-widest mb-1.5 font-prompt">Media</span>
-                                    <h4 className="text-[12px] font-bold text-brand-dark-navy leading-snug">World Autism Day: Specialised school shortage hinders education</h4>
+                                    <span className="text-brand-vibrant-blue font-bold text-[8.5px] uppercase tracking-widest mb-2.5 font-prompt">Media</span>
+                                    <h4 className="text-[13px] md:text-[14.5px] font-bold text-brand-dark-navy leading-tight">World Autism Day: Specialised school shortage hinders education</h4>
                                 </div>
                             </div>
                         ))}
@@ -166,22 +166,22 @@ export default function BlogPage() {
             <section className="px-6 md:px-16 py-16 md:py-28 bg-white">
                 <SectionHeader title="International" />
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
-                    <div className="md:col-span-5 bg-white border border-gray-100 overflow-hidden rounded-2xl shadow-sm">
-                        <div className="aspect-video bg-brand-vibrant-blue relative"></div>
-                        <div className="p-6 md:p-10">
-                            <p className="text-[9px] font-bold text-brand-dark-navy uppercase tracking-widest mb-4 font-prompt">International · Aviation</p>
-                            <h3 className="text-[18px] md:text-[20px] font-bold text-brand-dark-navy mb-5 leading-tight">Uganda Airlines Emergency Return. What Aviation Experts Say</h3>
-                            <p className="text-gray-500 font-prompt text-[13px] mb-8 leading-relaxed font-light hidden md:block">Specialists weigh in on bird strike risks and safety protocols across East Africa.</p>
-                            <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">2 days ago</p>
+                    <div className="md:col-span-4 bg-white border border-gray-100 overflow-hidden rounded-2xl shadow-sm flex flex-col h-full">
+                        <div className="aspect-[4/3] bg-brand-vibrant-blue relative"></div>
+                        <div className="p-8 md:p-10 flex-1 flex flex-col justify-center">
+                            <p className="text-[10px] font-bold text-brand-dark-navy uppercase tracking-widest mb-4 font-prompt">International · Aviation</p>
+                            <h3 className="text-[20px] md:text-[22px] font-bold text-brand-dark-navy mb-5 leading-tight">Uganda Airlines Emergency Return. What Aviation Experts Say</h3>
+                            <p className="text-gray-500 font-prompt text-[13px] mb-8 leading-relaxed font-light hidden md:block">Specialists weigh in on bird strike risks and airline safety protocols across East Africa's growing aviation sector.</p>
+                            <p className="text-gray-400 text-[9px] font-bold uppercase tracking-widest font-prompt">2 days ago</p>
                         </div>
                     </div>
-                    <div className="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-8">
+                    <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-14 gap-y-10">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
-                            <div key={i} className="flex gap-4 group cursor-pointer">
-                                <div className="w-16 h-16 md:w-20 md:h-20 bg-gray-300 rounded-xl shrink-0 group-hover:scale-95 transition-transform"></div>
+                            <div key={i} className="flex gap-3 group cursor-pointer border-b border-gray-100 pb-8">
+                                <div className="w-16 h-16 md:w-24 md:h-24 bg-gray-200 rounded-xl shrink-0 group-hover:scale-95 transition-transform"></div>
                                 <div className="flex flex-col justify-center">
-                                    <span className="text-brand-vibrant-blue font-bold text-[8px] uppercase tracking-widest mb-1.5 font-prompt">Science · Global</span>
-                                    <h4 className="text-[12px] font-bold text-brand-dark-navy leading-snug">AI Health Messaging in Kenya and Nigeria: A Surprising Verdict</h4>
+                                    <span className="text-brand-vibrant-blue font-bold text-[8.5px] uppercase tracking-widest mb-2.5 font-prompt">Science · Global</span>
+                                    <h4 className="text-[13px] md:text-[14.5px] font-bold text-brand-dark-navy leading-tight">AI Health Messaging in Kenya and Nigeria: A Surprising Verdict</h4>
                                 </div>
                             </div>
                         ))}

@@ -10,7 +10,8 @@ export default function Footer() {
     };
 
     return (
-        <footer className="bg-brand-dark-navy text-white px-6 md:px-16 pt-16 md:pt-24 pb-12">
+        /* Added border-t-[3px] border-white to the footer class */
+        <footer className="bg-brand-dark-navy text-white border-t-[3px] border-white px-6 md:px-16 pt-16 md:pt-24 pb-12">
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 lg:gap-16 mb-16 md:mb-20">
                 <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
                     <Image src="/logo.png" alt="GTV AFRIK" width={100} height={32} className="mb-6 opacity-90 md:w-[110px]" />

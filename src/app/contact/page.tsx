@@ -66,105 +66,107 @@ export default function ContactPage() {
             <div className="w-full h-[4px] bg-brand-yellow"></div>
 
             {/* --- FORM & SIDEBAR --- */}
-            <section className="px-16 py-28 grid grid-cols-12 gap-16 max-w-[1300px] mx-auto">
-                {/* Left: Message Form */}
-                <div className="col-span-7">
-                    <h2 className="text-2xl font-bold text-white mb-3">Send us a message</h2>
-                    <p className="text-[11px] text-white/30 font-prompt mb-14 tracking-wide">Fill in the form below and our team will get back to you within 24 hours.</p>
+            <section className="bg-white">
+                <div className="px-16 py-28 grid grid-cols-12 gap-16 max-w-[1300px] mx-auto">
+                    {/* Left: Message Form */}
+                    <div className="col-span-7">
+                        <h2 className="text-3xl font-bold text-brand-dark-navy mb-3">Send us a message</h2>
+                        <p className="text-[12px] text-gray-500 font-prompt mb-14 tracking-wide">Fill in the form below and our team will get back to you within 24 hours.</p>
 
-                    <form className="space-y-10">
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">First Name</label>
-                                <input type="text" placeholder="Enter your First name" className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt" />
-                            </div>
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Last Name</label>
-                                <input type="text" placeholder="Enter your Last name" className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Email Address</label>
-                                <input type="email" placeholder="your@email.com" className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt" />
-                            </div>
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Phone Number</label>
-                                <input type="text" placeholder="+234 xxx xxx xxx" className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Organization (Optional)</label>
-                                <input type="text" placeholder="your organization" className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt" />
-                            </div>
-                            <div>
-                                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Subject</label>
-                                <div className="relative">
-                                    <select className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-3 text-[11px] text-white/20 focus:outline-none font-prompt appearance-none">
-                                        <option>Select a subject</option>
-                                    </select>
+                        <form className="space-y-10">
+                            <div className="grid grid-cols-2 gap-8">
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">First Name</label>
+                                    <input type="text" placeholder="Enter your First name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Last Name</label>
+                                    <input type="text" placeholder="Enter your Last name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                 </div>
                             </div>
-                        </div>
 
-                        <div>
-                            <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-white mb-3 block font-prompt">Your Message</label>
-                            <textarea rows={6} placeholder="Write your message here..." className="w-full bg-[#111F41] border border-white/5 rounded-sm px-4 py-4 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-white/20 font-prompt resize-none"></textarea>
-                        </div>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Email Address</label>
+                                    <input type="email" placeholder="your@email.com" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Phone Number</label>
+                                    <input type="text" placeholder="+234 xxx xxx xxx" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                </div>
+                            </div>
 
-                        <button className="bg-brand-yellow text-brand-dark-navy px-10 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-xl hover:brightness-110 active:scale-95 transition-all">
-                            SUBMIT
-                        </button>
-                    </form>
-                </div>
-
-                {/* Right: Sidebar Cards */}
-                <div className="col-span-5 space-y-8">
-                    {/* Offices */}
-                    <div className="bg-[#152347] border border-white/10 rounded-[1.5rem] p-10">
-                        <div className="flex items-center gap-2 mb-10">
-                            <div className="w-[3px] h-4 bg-brand-yellow"></div>
-                            <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-prompt">Our Offices</h4>
-                        </div>
-
-                        <div className="space-y-10">
-                            {[
-                                { region: "West Africa", addr: "Suite 38 (3rd Floor) Birgi Plaza.\nPlot 743 Justice John T. Tsoho Street.\nWuye District. Abuja, Nigeria." },
-                                { region: "South Africa", addr: "9 pelican street sandton.\nJohannesburg, South Africa." },
-                                { region: "North Africa", addr: "Road 198, degla maadi.\nbuilding 6. Cairo, Egypt" }
-                            ].map((office, i) => (
-                                <div key={i} className="flex gap-4">
-                                    <div className="shrink-0 mt-1">
-                                        <YellowIcon type="pin" />
-                                    </div>
-                                    <div>
-                                        <h5 className="text-[13px] font-bold text-brand-yellow uppercase tracking-widest mb-3">{office.region}</h5>
-                                        <p className="text-[13px] text-white/90 font-prompt font-light leading-relaxed whitespace-pre-line">{office.addr}</p>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Organization (Optional)</label>
+                                    <input type="text" placeholder="your organization" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Subject</label>
+                                    <div className="relative">
+                                        <select className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-gray-400 focus:outline-none font-prompt appearance-none">
+                                            <option>Select a subject</option>
+                                        </select>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+
+                            <div>
+                                <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Your Message</label>
+                                <textarea rows={6} placeholder="Write your message here..." className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-5 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt resize-none transition-all"></textarea>
+                            </div>
+
+                            <button className="bg-brand-yellow text-brand-dark-navy px-10 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-xl hover:brightness-110 active:scale-95 transition-all">
+                                SUBMIT
+                            </button>
+                        </form>
                     </div>
 
-                    {/* Direct Contact */}
-                    <div className="bg-[#152347] border border-white/10 rounded-[1.5rem] p-10">
-                        <div className="flex items-center gap-2 mb-10">
-                            <div className="w-[3px] h-4 bg-brand-yellow"></div>
-                            <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-prompt">Direct Contact</h4>
+                    {/* Right: Sidebar Cards */}
+                    <div className="col-span-5 space-y-8">
+                        {/* Offices */}
+                        <div className="bg-brand-dark-navy rounded-[1.5rem] p-10 shadow-2xl">
+                            <div className="flex items-center gap-2 mb-10">
+                                <div className="w-[3px] h-4 bg-brand-yellow"></div>
+                                <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-prompt">Our Offices</h4>
+                            </div>
+
+                            <div className="space-y-10">
+                                {[
+                                    { region: "West Africa", addr: "Suite 38 (3rd Floor) Birgi Plaza.\nPlot 743 Justice John T. Tsoho Street.\nWuye District. Abuja, Nigeria." },
+                                    { region: "South Africa", addr: "9 pelican street sandton.\nJohannesburg, South Africa." },
+                                    { region: "North Africa", addr: "Road 198, degla maadi.\nbuilding 6. Cairo, Egypt" }
+                                ].map((office, i) => (
+                                    <div key={i} className="flex gap-4">
+                                        <div className="shrink-0 mt-1">
+                                            <YellowIcon type="pin" />
+                                        </div>
+                                        <div>
+                                            <h5 className="text-[13px] font-bold text-brand-yellow uppercase tracking-widest mb-3">{office.region}</h5>
+                                            <p className="text-[13px] text-white/90 font-prompt font-light leading-relaxed whitespace-pre-line">{office.addr}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
-                        <div className="space-y-6">
-                            {[1, 2, 3].map((item, i) => (
-                                <div key={i} className="flex items-center gap-4 text-white font-prompt text-[13px] font-medium group cursor-pointer">
-                                    <YellowIcon type={i === 2 ? 'phone' : 'mail'} />
-                                    <span className="group-hover:text-brand-yellow transition-colors">
-                                        {i === 2 ? '+234 818 805 9300' : 'info@gtvafrik.com'}
-                                    </span>
-                                </div>
-                            ))}
+                        {/* Direct Contact */}
+                        <div className="bg-brand-dark-navy rounded-[1.5rem] p-10 shadow-2xl">
+                            <div className="flex items-center gap-2 mb-10">
+                                <div className="w-[3px] h-4 bg-brand-yellow"></div>
+                                <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-prompt">Direct Contact</h4>
+                            </div>
+
+                            <div className="space-y-6">
+                                {[1, 2, 3].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 text-white font-prompt text-[13px] font-medium group cursor-pointer">
+                                        <YellowIcon type={i === 2 ? 'phone' : 'mail'} />
+                                        <span className="group-hover:text-brand-yellow transition-colors">
+                                            {i === 2 ? '+234 818 805 9300' : 'info@gtvafrik.com'}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -48,7 +48,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
           const category = await prisma.category.upsert({
             where: { name: catName },
             update: {},
-            create: { name: catName }
+            create: { name: catName, slug: catName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') }
           });
           return { categoryId: category.id };
         })

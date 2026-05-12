@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     const { data: resendData, error } = await resend.emails.send({
       from: 'GTV Afrik Contact <onboarding@resend.dev>',
-      to: ['info@gtvafrik.com'], // Update this to your real email once your domain is verified
+      to: ['gtvafrik@gmail.com'], // Temporarily using the verified onboarding email for testing
       subject: `New Contact Form Submission: ${subject || 'No Subject'}`,
       html: `
         <h2>New Message from GTV Afrik Website</h2>

@@ -198,7 +198,12 @@ export default function LandingPage() {
               { label: "PARTNER WITH US", sub: "Advocacy, Campaigns & Media Production" },
               { label: "BOOK AN APPOINTMENT", sub: "Talk to our team about your goals" }
             ].map((link, i) => (
-              <div key={i} className="bg-white/10 border border-white/5 p-5 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl">
+              <div 
+                key={i} 
+                data-cal-link={link.label === "BOOK AN APPOINTMENT" ? "gtv-afrik/30min" : undefined}
+                data-cal-config={link.label === "BOOK AN APPOINTMENT" ? '{"layout":"month_view"}' : undefined}
+                className="bg-white/10 border border-white/5 p-5 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl"
+              >
                 <div className="flex items-center gap-4 md:gap-6">
                   <div className="w-12 md:w-16 h-10 md:h-12 bg-gray-300/20 rounded-md shrink-0"></div>
                   <div>

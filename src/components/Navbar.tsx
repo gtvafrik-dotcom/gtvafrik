@@ -1,10 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getCalApi } from "@calcom/embed-react";
 
 export default function Navbar({ activePage }: { activePage?: string }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        (async function () {
+            const cal = await getCalApi();
+            cal("ui", {
+                theme: "dark",
+                styles: { branding: { brandColor: "#ffcc00" } },
+                hideEventTypeDetails: false,
+                layout: "month_view"
+            });
+        })();
+    }, []);
     const navItems = [
         { name: "Home", href: "/" },
         { name: "What we do", href: "/services", hasDropdown: true },
@@ -27,7 +40,7 @@ export default function Navbar({ activePage }: { activePage?: string }) {
                             key={item.name}
                             href={item.href}
                             className={`text-[12px] font-medium transition-colors font-prompt flex items-center gap-1.5 ${item.isYellow ? "text-brand-yellow" :
-                                    activePage === item.name ? "text-brand-yellow" : "text-white hover:text-brand-yellow"
+                                activePage === item.name ? "text-brand-yellow" : "text-white hover:text-brand-yellow"
                                 }`}
                         >
                             {item.name}
@@ -41,7 +54,11 @@ export default function Navbar({ activePage }: { activePage?: string }) {
                 </div>
 
                 {/* Desktop Button */}
-                <button className="hidden md:block bg-brand-yellow text-brand-dark-navy px-6 py-2.5 rounded-lg font-bold text-[11px] hover:brightness-110 transition-all font-prompt">
+                <button
+                    data-cal-link="gtv-afrik-bsbmax/30min"
+                    data-cal-config='{"layout":"month_view"}'
+                    className="hidden md:block bg-brand-yellow text-brand-dark-navy px-6 py-2.5 rounded-lg font-bold text-[11px] hover:brightness-110 transition-all font-prompt"
+                >
                     Book an Appointment
                 </button>
 
@@ -68,7 +85,7 @@ export default function Navbar({ activePage }: { activePage?: string }) {
                             onClick={() => setIsOpen(false)}
                             href={item.href}
                             className={`text-[24px] font-bold font-prompt ${item.isYellow ? "text-brand-yellow" :
-                                    activePage === item.name ? "text-brand-yellow" : "text-white"
+                                activePage === item.name ? "text-brand-yellow" : "text-white"
                                 }`}
                         >
                             {item.name}
@@ -76,7 +93,11 @@ export default function Navbar({ activePage }: { activePage?: string }) {
                     ))}
                 </div>
 
-                <button className="mt-auto bg-brand-yellow text-brand-dark-navy w-full py-4 rounded-lg font-bold text-[14px] hover:brightness-110 transition-all font-prompt">
+                <button
+                    data-cal-link="gtv-afrik-bsbmax/30min"
+                    data-cal-config='{"layout":"month_view"}'
+                    className="mt-auto bg-brand-yellow text-brand-dark-navy w-full py-4 rounded-lg font-bold text-[14px] hover:brightness-110 transition-all font-prompt"
+                >
                     Book an Appointment
                 </button>
             </div>

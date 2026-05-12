@@ -58,3 +58,5 @@ implementation_plan.md
 task.md
 walkthrough.md
 scratch/
+
+/src/generated/prisma

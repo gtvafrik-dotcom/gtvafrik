@@ -1,7 +1,10 @@
+'use client';
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CtaBanner from "@/components/CtaBanner";
 import Image from "next/image";
+import { useState } from "react";
 
 const YellowIcon = ({ type }: { type: 'mail' | 'phone' | 'pin' }) => (
     <div className="w-8 h-8 rounded-lg border border-brand-yellow flex items-center justify-center bg-brand-yellow/5">
@@ -25,6 +28,55 @@ const YellowIcon = ({ type }: { type: 'mail' | 'phone' | 'pin' }) => (
 );
 
 export default function ContactPage() {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        organization: '',
+        subject: '',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+        setErrorMessage('');
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to send message');
+            }
+
+            setSubmitStatus('success');
+            setFormData({
+                firstName: '', lastName: '', email: '', phone: '',
+                organization: '', subject: '', message: ''
+            });
+        } catch (error: any) {
+            setSubmitStatus('error');
+            setErrorMessage(error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     return (
         <div className="min-h-screen bg-brand-dark-navy font-gudlak selection:bg-brand-yellow selection:text-brand-dark-navy">
             <Navbar activePage="Contact" />
@@ -81,16 +133,28 @@ export default function ContactPage() {
                             <h2 className="text-2xl md:text-3xl font-bold text-brand-dark-navy mb-3">Send us a message</h2>
                             <p className="text-[12px] text-gray-500 font-prompt mb-8 md:mb-14 tracking-wide">Fill in the form below and our team will get back to you within 24 hours.</p>
 
-                            <form className="space-y-6 md:space-y-10">
+                            {submitStatus === 'success' && (
+                                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg font-prompt text-sm">
+                                    Thank you for your message! We will get back to you soon.
+                                </div>
+                            )}
+
+                            {submitStatus === 'error' && (
+                                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg font-prompt text-sm">
+                                    {errorMessage || 'Failed to send message. Please try again.'}
+                                </div>
+                            )}
+
+                            <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
                                 {/* First Row - Mobile Stacked, Desktop Side by Side */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">First Name</label>
-                                        <input type="text" placeholder="Enter your First name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                        <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required placeholder="Enter your First name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                     </div>
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Last Name</label>
-                                        <input type="text" placeholder="Enter your Last name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                        <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required placeholder="Enter your Last name" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                     </div>
                                 </div>
 
@@ -98,11 +162,11 @@ export default function ContactPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Email Address</label>
-                                        <input type="email" placeholder="your@email.com" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                        <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="your@email.com" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                     </div>
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Phone Number</label>
-                                        <input type="text" placeholder="+234 xxx xxx xxx" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                        <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="+234 xxx xxx xxx" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                     </div>
                                 </div>
 
@@ -110,13 +174,17 @@ export default function ContactPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Organization (Optional)</label>
-                                        <input type="text" placeholder="your organization" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
+                                        <input type="text" name="organization" value={formData.organization} onChange={handleChange} placeholder="your organization" className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt transition-all" />
                                     </div>
                                     <div>
                                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Subject</label>
                                         <div className="relative">
-                                            <select className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-gray-400 focus:outline-none font-prompt appearance-none">
-                                                <option>Select a subject</option>
+                                            <select name="subject" value={formData.subject} onChange={handleChange} required className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-4 text-[12px] text-gray-400 focus:outline-none font-prompt appearance-none">
+                                                <option value="">Select a subject</option>
+                                                <option value="General Inquiry">General Inquiry</option>
+                                                <option value="Advertisement">Advertisement</option>
+                                                <option value="Partnership">Partnership</option>
+                                                <option value="Pitch a Story">Pitch a Story</option>
                                             </select>
                                         </div>
                                     </div>
@@ -125,12 +193,12 @@ export default function ContactPage() {
                                 {/* Message Field - Full Width */}
                                 <div>
                                     <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-dark-navy mb-3 block font-prompt">Your Message</label>
-                                    <textarea rows={6} placeholder="Write your message here..." className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-5 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt resize-none transition-all"></textarea>
+                                    <textarea name="message" value={formData.message} onChange={handleChange} required rows={6} placeholder="Write your message here..." className="w-full bg-gray-50 border border-gray-100 rounded-sm px-4 py-5 text-[12px] text-brand-dark-navy placeholder:text-gray-300 focus:outline-none focus:border-brand-yellow font-prompt resize-none transition-all"></textarea>
                                 </div>
 
                                 {/* Submit Button */}
-                                <button className="bg-brand-yellow text-brand-dark-navy px-10 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-xl hover:brightness-110 active:scale-95 transition-all">
-                                    SUBMIT
+                                <button type="submit" disabled={isSubmitting} className="bg-brand-yellow text-brand-dark-navy px-10 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-xl hover:brightness-110 active:scale-95 transition-all disabled:opacity-50">
+                                    {isSubmitting ? 'SENDING...' : 'SUBMIT'}
                                 </button>
                             </form>
                         </div>

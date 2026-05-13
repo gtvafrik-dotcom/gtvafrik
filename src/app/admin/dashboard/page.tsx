@@ -2,6 +2,8 @@ import prisma from "../../../../lib/prisma";
 import Link from 'next/link';
 import { FileText, Globe, Clock, Newspaper, PenTool, LayoutList } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Dashboard() {
   // Fetch data
   const totalArticles = await prisma.article.count();
@@ -87,7 +89,7 @@ export default async function Dashboard() {
           </div>
           
           <div className="space-y-4">
-            {recentArticles.length > 0 ? recentArticles.map((article, idx) => (
+            {recentArticles.length > 0 ? recentArticles.map((article: any, idx: number) => (
               <Link href={`/admin/articles/${article.id}/edit`} key={article.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors group">
                 <div className="flex items-center gap-4 flex-1">
                   <span className="text-gray-400 font-medium w-6">0{idx + 1}</span>

@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "../../../lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 const SectionHeader = ({ title, light = false, viewAll = true }: { title: string; light?: boolean; viewAll?: boolean }) => (
     <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">

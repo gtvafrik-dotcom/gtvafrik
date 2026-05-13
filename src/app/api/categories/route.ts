@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from "../../../../lib/prisma";
 
+export const dynamic = 'force-dynamic';
+
 const FIXED_CATEGORIES = [
   "Headlines", "Breaking News", "GTV Content", "Politics", 
   "International", "Entertainment", "Health", "Sports"
@@ -14,7 +16,7 @@ export async function GET() {
 
     return NextResponse.json({
       fixed: FIXED_CATEGORIES,
-      custom: dbCategories.map(c => c.name)
+      custom: dbCategories.map((c: any) => c.name)
     });
   } catch (error) {
     console.error('Error fetching categories:', error);

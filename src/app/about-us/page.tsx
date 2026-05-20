@@ -47,12 +47,20 @@ export default function AboutPage() {
                     </div>
 
                     <div className="col-span-1 lg:col-span-6">
-                        <div className="w-full aspect-video bg-brand-vibrant-blue relative shadow-2xl rounded-lg">
-                            <div className="absolute top-4 left-4 bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[9px] font-bold uppercase tracking-widest">
-                                EST 20XX
-                            </div>
-                        </div>
-                    </div>
+    <div className="w-full aspect-video relative shadow-2xl rounded-lg overflow-hidden bg-brand-dark-navy/50">
+        <video 
+            src="/promo.mp4" 
+            controls 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="w-full h-full object-cover"
+        >
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>
                 </div>
             </section>
 

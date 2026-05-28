@@ -124,21 +124,27 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
         
-        {/* Right Side Background Video (Fixed for Full Width & Proper Blending) */}
-        <div className="absolute inset-0 z-0 hidden md:block pointer-events-none">
-          <video
-            src="/hero.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-contain object-right opacity-80"
-            style={{ 
-              maskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)', 
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)' 
-            }}
-          />
-        </div>
+        {/* Desktop Video — Right Half Only */}
+<div className="absolute right-0 top-0 bottom-0 w-[55%] z-0 pointer-events-none hidden md:block">
+  <video
+    src="/hero.mp4"
+    autoPlay loop muted playsInline
+    className="w-full h-full object-cover opacity-80"
+    style={{
+      maskImage: 'linear-gradient(to right, transparent 0%, black 35%)',
+      WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 35%)'
+    }}
+  />
+</div>
+
+{/* Mobile Video — Full Background */}
+<div className="absolute inset-0 bg-brand-dark-navy/70 md:hidden z-0"></div>
+  <video
+    src="/hero.mp4"
+    autoPlay loop muted playsInline
+    className="w-full h-full object-cover opacity-30"
+  />
+</div>
 
         {/* Diagonal Navy Left Side */}
         <div

@@ -29,36 +29,64 @@ const PlayButton = ({ small = false }: { small?: boolean }) => (
 );
 
 // --- DATA ARRAYS ---
-const whatWeDoSlides = [
-  {
-    tag: "Media",
-    title: "Where African Stories Meet World-Class Production.",
-    desc: "From documentaries to digital content and commercial productions, we craft media that doesn't just inform, it resonates. We tell African stories with the depth, nuance, and artistry they deserve.",
-    image: "/media.jpg"
+const fivePillars = [
+  { 
+    num: "01", 
+    title: "Media", 
+    desc: "From documentaries to digital content and commercial productions we craft media that resonates and tells African stories with depth.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="23 7 16 12 23 17 23 7"></polygon>
+        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+      </svg>
+    )
   },
-  {
-    tag: "Advertising",
-    title: "Strategic Advertising That Drives Revenue, Commands Markets.",
-    desc: "Effective advertising is more than creative content, it is a precision-engineered business tool. At GTVAFRIK, we develop end-to-end advertising solutions anchored in four critical pillars.",
-    image: "/advertising.jpg"
+  { 
+    num: "02", 
+    title: "Advocacy", 
+    desc: "Driving policy, social impact, and narrative change for governments, NGOs, and multilateral organisations across the continent.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 11l18-5v12L3 14v-3z"></path>
+        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+      </svg>
+    )
   },
-  {
-    tag: "Marketing",
-    title: "Position Your Brand for Impact And Own Your Market Space.",
-    desc: "From brand identity to audience growth and digital strategy, we build marketing ecosystems that don't just attract attention, they build loyalty, trust, and long-term relevance across African markets and beyond.",
-    image: "/marketing.jpg"
+  { 
+    num: "03", 
+    title: "Marketing", 
+    desc: "Strategic brand campaigns that connect multinationals with African audiences rooted in culture, driven by data.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
+      </svg>
+    )
   },
-  {
-    tag: "Advocacy",
-    title: "Narratives That Drive Change.",
-    desc: "We go beyond communication to shape the stories that matter, social impact storytelling, policy narratives, and advocacy campaigns that inspire action, shift perception, and build lasting influence.",
-    image: "/advocacy.jpg"
+  { 
+    num: "04", 
+    title: "Mobility", 
+    desc: "Connecting people, ideas, and opportunities across Africa enabling movement and access where it matters most.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+        <line x1="9" y1="3" x2="9" y2="21"></line>
+        <line x1="15" y1="3" x2="15" y2="21"></line>
+      </svg>
+    )
   },
-  {
-    tag: "Mobility",
-    title: "Scalable Content Distribution Across Every Platform That Matters.",
-    desc: "We distribute your message across the digital channels that matter, ensuring your content moves with speed, reach, and purpose across platforms where your audience lives.",
-    image: "/mobility.jpg"
+  { 
+    num: "05", 
+    title: "Advertising", 
+    desc: "Targeted reach across GTV Afrik's pan-African and diaspora audiences built for brands that want to be seen and remembered.",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+    )
   }
 ];
 
@@ -72,16 +100,6 @@ const partnerLogos = [
 ];
 
 export default function LandingPage() {
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  // Auto-play the slider every 6 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % whatWeDoSlides.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="min-h-screen bg-white font-prompt overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
       
@@ -104,26 +122,45 @@ export default function LandingPage() {
       <Navbar activePage="Home" />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-transparent">
+      <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
+        
+        {/* Right Side Background Video (Fixed for Full Width & Proper Blending) */}
+        <div className="absolute inset-0 z-0 hidden md:block pointer-events-none">
+          <video
+            src="/hero.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-contain object-right opacity-80"
+            style={{ 
+              maskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)', 
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)' 
+            }}
+          />
+        </div>
+
+        {/* Diagonal Navy Left Side */}
         <div
-          className="absolute inset-0 bg-brand-dark-navy hidden md:block"
+          className="absolute inset-0 bg-brand-dark-navy hidden md:block z-0"
           style={{ clipPath: 'polygon(0 0, 58% 0, 48% 100%, 0% 100%)' }}
         ></div>
-        <div className="absolute inset-0 bg-brand-dark-navy md:hidden"></div>
+        <div className="absolute inset-0 bg-brand-dark-navy md:hidden z-0"></div>
 
-        <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0">
-          <div className="md:col-span-6 text-white text-center md:text-left">
+        {/* Content */}
+        <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0 min-h-[85vh]">
+          <div className="md:col-span-7 lg:col-span-6 text-white text-center md:text-left">
             <div className="inline-block bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.2em] mb-8">
               Accelerating African Narrative
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold leading-[1.1] tracking-tight mb-8">
+            <h1 className="text-3xl md:text-5xl lg:text-[56px] font-bold leading-[1.05] tracking-tight mb-8">
               We Shape How Africa Is <br />
               <span className="text-brand-yellow">Seen, Heard</span> and Known.
             </h1>
 
-            <p className="font-prompt font-light text-[14px] text-white/70 max-w-md mx-auto md:mx-0 mb-10 leading-relaxed">
-              GTVAFRIK is a Pan-African media and communications company built to shape narratives, amplify voices, and We position brands where it matters most, deeply locally rooted, yet globally positioned.
+            <p className="font-prompt font-light text-[14px] lg:text-[15px] text-white/70 max-w-lg mx-auto md:mx-0 mb-10 leading-relaxed">
+              GTVAFRIK is a Pan-African media and communications company built to shape narratives, amplify voices, and position brands where it matters most, locally rooted, globally relevant.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-16 justify-center md:justify-start">
@@ -161,13 +198,10 @@ export default function LandingPage() {
         
         {/* Marquee Wrapper */}
         <div className="relative w-full overflow-hidden flex items-center">
-          {/* Gradients for smooth fade in/out on the edges */}
           <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
           
-          {/* Animated Track */}
           <div className="animate-marquee gap-12 md:gap-24 px-6 md:px-12 items-center">
-            {/* Render array twice to create the infinite seamless loop */}
             {[...partnerLogos, ...partnerLogos].map((logo, index) => (
               <div key={index} className="relative w-24 md:w-32 h-16 shrink-0 flex items-center justify-center">
                 <Image 
@@ -182,86 +216,56 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- WHAT WE DO (ANIMATED SLIDER) --- */}
-      <section className="bg-brand-light-blue py-16 md:py-32 overflow-hidden">
+      {/* --- WHAT WE DO (5 PILLARS LAYOUT WITH ICONS) --- */}
+      <section className="bg-white py-16 md:py-32">
         <div className="container mx-auto px-6 md:px-16">
-          <SectionHeader title="What we do" />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
-            
-            {/* Left Side: Animated Text */}
-            <div className="relative h-[350px] md:h-[400px] w-full order-2 md:order-1">
-              {whatWeDoSlides.map((slide, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 flex flex-col justify-center transition-all duration-700 ease-in-out
-                    ${activeSlide === index ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-8 pointer-events-none z-0'}`}
-                >
-                  <div className="bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-md inline-block text-[8px] font-bold uppercase tracking-widest mb-6 self-start">
-                    {slide.tag}
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 lg:mb-16 gap-6">
+            <div>
+              <SectionHeader title="WHAT WE DO" />
+              <h2 className="text-[32px] md:text-[40px] font-bold text-brand-dark-navy leading-[1.1]">
+                Five Pillars <br className="hidden md:block" /> One <span className="text-brand-yellow">African Mission</span>
+              </h2>
+            </div>
+            <p className="max-w-xs text-[13px] font-prompt text-brand-dark-navy/60 leading-relaxed pb-2 hidden md:block">
+              From pan-African advocacy to world-class media production, every service we offer is built to amplify African voices and position brands with purpose.
+            </p>
+          </div>
+
+          {/* 5 Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {fivePillars.map((pillar) => (
+              <div 
+                key={pillar.num} 
+                className="bg-[#F8F9FA] p-6 lg:p-8 flex flex-col justify-between h-[300px] lg:h-[420px] group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100 relative overflow-hidden rounded-sm"
+              >
+                <div>
+                  {/* Icon Container */}
+                  <div className="w-10 h-10 bg-brand-yellow/30 text-brand-dark-navy rounded-md mb-6 flex items-center justify-center transition-transform group-hover:scale-110">
+                    {pillar.icon}
                   </div>
-                  <h2 className="text-[28px] md:text-[32px] font-bold text-brand-dark-navy leading-[1.1] mb-6">
-                    {slide.title}
-                  </h2>
-                  <p className="font-prompt font-light text-[14px] text-brand-dark-navy/60 leading-relaxed mb-10 max-w-md">
-                    {slide.desc}
+                  <h3 className="text-lg lg:text-xl font-bold text-brand-dark-navy mb-3 lg:mb-4">{pillar.title}</h3>
+                  <p className="text-[12px] lg:text-[13px] font-prompt text-brand-dark-navy/60 leading-relaxed">
+                    {pillar.desc}
                   </p>
-                  <div className="flex gap-4">
-                    <button className="bg-brand-yellow text-brand-dark-navy px-8 py-2.5 rounded-md font-bold text-[9px] uppercase tracking-widest shadow-md hover:brightness-110 transition-all">
-                      See more
-                    </button>
-                    <button className="border border-brand-dark-navy/10 text-brand-dark-navy px-8 py-2.5 rounded-md font-bold text-[9px] uppercase tracking-widest hover:bg-brand-dark-navy hover:text-white transition-all">
-                      Contact us
-                    </button>
-                  </div>
                 </div>
-              ))}
-
-              {/* Slider Progress Indicators */}
-              <div className="absolute bottom-0 left-0 flex gap-2 z-20">
-                {whatWeDoSlides.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveSlide(index)}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${
-                      activeSlide === index ? 'w-8 bg-brand-yellow' : 'w-2 bg-brand-dark-navy/20 hover:bg-brand-dark-navy/40'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
+                <div className="flex justify-between items-end">
+                  <span className="text-brand-dark-navy group-hover:translate-x-2 transition-transform mb-2">→</span>
+                  <span className="text-6xl lg:text-7xl font-bold text-gray-200/50 font-prompt italic tracking-tighter group-hover:text-brand-yellow/30 transition-colors">
+                    {pillar.num}
+                  </span>
+                </div>
               </div>
-            </div>
-
-            {/* Right Side: Animated Images */}
-            <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl order-1 md:order-2 bg-brand-dark-navy/10">
-              {whatWeDoSlides.map((slide, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 transition-all duration-1000 ease-in-out
-                    ${activeSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                >
-                  <Image
-                    src={slide.image}
-                    alt={slide.title}
-                    fill
-                    className={`object-cover transition-transform duration-[6000ms] ease-linear
-                      ${activeSlide === index ? 'scale-105' : 'scale-100'}`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark-navy/40 to-transparent opacity-50"></div>
-                </div>
-              ))}
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
 
       {/* --- FEATURED CONTENT --- */}
-      <section className="py-20 md:py-32 px-6 md:px-16 bg-white">
+      <section className="py-20 md:py-32 px-6 md:px-16 bg-[#F8F9FA]">
         <SectionHeader title="Featured Content" viewAll />
         <div className="flex gap-2.5 overflow-x-auto no-scrollbar mb-10 pb-2">
           {["All", "Latest Shows", "Documentaries", "Podcasts", "Short Films"].map((tab) => (
-            <button key={tab} className={`px-5 py-2 rounded-full border text-[9px] font-bold uppercase tracking-widest whitespace-nowrap transition-all ${tab === 'All' ? 'bg-brand-yellow text-brand-dark-navy border-brand-yellow' : 'border-gray-100 text-gray-400 hover:border-brand-dark-navy'}`}>
+            <button key={tab} className={`px-5 py-2 rounded-full border text-[9px] font-bold uppercase tracking-widest whitespace-nowrap transition-all ${tab === 'All' ? 'bg-brand-yellow text-brand-dark-navy border-brand-yellow' : 'border-gray-200 text-gray-400 hover:border-brand-dark-navy'}`}>
               {tab}
             </button>
           ))}

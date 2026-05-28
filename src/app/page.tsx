@@ -21,7 +21,7 @@ const SectionHeader = ({ title, light = false, viewAll = false, centered = false
 );
 
 const PlayButton = ({ small = false }: { small?: boolean }) => (
-  <div className="absolute inset-0 flex items-center justify-center">
+  <div className="absolute inset-0 flex items-center justify-center z-10">
     <div className={`${small ? 'w-10 h-10' : 'w-12 h-12'} bg-brand-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer`}>
       <div className={`w-0 h-0 border-t-[${small ? '6px' : '7px'}] border-t-transparent border-l-[${small ? '11px' : '13px'}] border-l-brand-dark-navy border-b-[${small ? '6px' : '7px'}] border-b-transparent ml-1`}></div>
     </div>
@@ -99,6 +99,30 @@ const partnerLogos = [
   "/inec.png"
 ];
 
+const featuredContent = [
+  {
+    tag: "Featured · Leadership",
+    title: "Onoja (The Man): A Legacy of Service",
+    desc: "Former Deputy Governor of Kogi State, Chief Edward David Onoja, shares insights into his tenure, President Bola Ahmed Tinubu’s transformative policies, and his post-office journey. With a career spanning banking, politics, and regional development, Onoja’s perspective bridges grassroots governance and national strategy.",
+    image: "/onoja.jpg",
+    date: "1 day ago"
+  },
+  {
+    tag: "Environment · Climate",
+    title: "Navigating Personal Choice and Systemic Change",
+    desc: "Climate scientist Katharine Hayhoe understands the environmental cost of air travel intimately. Yet, living within systems built on fossil fuels, she navigates the tension between personal responsibility and systemic necessity, shifting focus from guilt to thoughtful action.",
+    image: "/climate.jpg",
+    date: "3 days ago"
+  },
+  {
+    tag: "History · Heritage",
+    title: "Slavery: The Descendants of Empires",
+    desc: "They tell you your history began in chains. But that is a lie they fed you to keep you small. Long before the first ship, your blood built the world. You are the descendants of empires. The strength is not in your future. It is in your spine. Walk like you know it.",
+    image: "/media.jpg",
+    date: "1 week ago"
+  }
+];
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white font-prompt overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
@@ -124,32 +148,32 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
         
-        {/* Right Side Background Video (Fixed for Full Width & Proper Blending) */}
-        <div className="absolute inset-0 z-0 hidden md:block pointer-events-none">
+        {/* Right Side Background Video Container restricted to 60% width */}
+        <div className="absolute right-0 top-0 bottom-0 w-full md:w-[60%] z-0 hidden md:block pointer-events-none">
           <video
             src="/hero.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-contain object-right opacity-80"
+            className="w-full h-full object-contain object-right opacity-90"
             style={{ 
-              maskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)', 
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 45%, black 75%)' 
+              maskImage: 'linear-gradient(to right, transparent 0%, black 15%)', 
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%)' 
             }}
           />
         </div>
 
-        {/* Diagonal Navy Left Side */}
+        {/* Diagonal Navy Left Side - Pulled back to the left */}
         <div
           className="absolute inset-0 bg-brand-dark-navy hidden md:block z-0"
-          style={{ clipPath: 'polygon(0 0, 58% 0, 48% 100%, 0% 100%)' }}
+          style={{ clipPath: 'polygon(0 0, 50% 0, 40% 100%, 0% 100%)' }}
         ></div>
         <div className="absolute inset-0 bg-brand-dark-navy md:hidden z-0"></div>
 
-        {/* Content */}
+        {/* Content - lg:col-span-5 to constrain text width */}
         <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0 min-h-[85vh]">
-          <div className="md:col-span-7 lg:col-span-6 text-white text-center md:text-left">
+          <div className="md:col-span-7 lg:col-span-5 text-white text-center md:text-left">
             <div className="inline-block bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.2em] mb-8">
               Accelerating African Narrative
             </div>
@@ -272,19 +296,24 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { tag: "Featured · Documentary", title: "Rethinking Travel in a Warming World — Africa's Climate Response" },
-            { tag: "Podcast", title: "Chief Edward David Onoja: Reflecting on Leadership, Tinubu's Vision, and Nigeria's Future" },
-            { tag: "Short Film", title: "They Didn't Steal Slaves — They Stole Kings" }
-          ].map((item, i) => (
-            <div key={i} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
-              <div className="aspect-video bg-brand-vibrant-blue relative">
+          {featuredContent.map((item, i) => (
+            <div key={i} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col">
+              <div className="aspect-video bg-brand-dark-navy relative overflow-hidden">
+                <Image 
+                  src={item.image} 
+                  alt={item.title} 
+                  fill 
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
                 <PlayButton />
+                <div className="absolute inset-0 bg-brand-dark-navy/10 group-hover:bg-transparent transition-colors z-0"></div>
               </div>
-              <div className="p-8">
+              <div className="p-6 md:p-8 flex flex-col flex-grow">
                 <p className="text-[9px] font-prompt font-bold text-brand-dark-navy/40 uppercase tracking-widest mb-3">{item.tag}</p>
-                <h3 className="text-[15px] font-bold text-brand-dark-navy leading-snug mb-4">{item.title}</h3>
-                <p className="text-[8px] font-prompt text-gray-300 uppercase tracking-widest font-medium">2 days ago</p>
+                <h3 className="text-[15px] font-bold text-brand-dark-navy leading-snug mb-3">{item.title}</h3>
+                {/* line-clamp-3 ensures the description doesn't break the uniform height of the cards */}
+                <p className="text-[12px] font-prompt text-brand-dark-navy/60 line-clamp-3 mb-6 leading-relaxed flex-grow">{item.desc}</p>
+                <p className="text-[8px] font-prompt text-gray-300 uppercase tracking-widest font-medium mt-auto">{item.date}</p>
               </div>
             </div>
           ))}

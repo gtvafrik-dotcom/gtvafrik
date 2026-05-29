@@ -123,6 +123,43 @@ const featuredContent = [
   }
 ];
 
+const ctaLinks = [
+  { 
+    label: "ADVERTISE WITH GTV AFRIK", 
+    sub: "Reach Africa's decision makers & global diaspora",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-yellow">
+        <path d="M3 11l18-5v12L3 14v-3z"></path>
+        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+      </svg>
+    )
+  },
+  { 
+    label: "PARTNER WITH US", 
+    sub: "Advocacy, Campaigns & Media Production",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-yellow">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+    )
+  },
+  { 
+    label: "BOOK AN APPOINTMENT", 
+    sub: "Talk to our team about your goals",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-yellow">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    )
+  }
+];
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white font-prompt overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
@@ -148,8 +185,8 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
         
-        {/* Right Side Background Video Container restricted to 60% width */}
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-[60%] z-0 hidden md:block pointer-events-none">
+        {/* Right Side Background Video Container restricted to 50% width to prevent cutoff */}
+        <div className="absolute right-0 top-0 bottom-0 w-full md:w-[50%] z-0 hidden md:block pointer-events-none">
           <video
             src="/hero.mp4"
             autoPlay
@@ -164,16 +201,16 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Diagonal Navy Left Side - Pulled back to the left */}
+        {/* Diagonal Navy Left Side - Adjusted polygon to give text more space */}
         <div
           className="absolute inset-0 bg-brand-dark-navy hidden md:block z-0"
-          style={{ clipPath: 'polygon(0 0, 50% 0, 40% 100%, 0% 100%)' }}
+          style={{ clipPath: 'polygon(0 0, 55% 0, 45% 100%, 0% 100%)' }}
         ></div>
         <div className="absolute inset-0 bg-brand-dark-navy md:hidden z-0"></div>
 
-        {/* Content - lg:col-span-5 to constrain text width */}
+        {/* Content - Increased col-span to constrain text better without cutting off */}
         <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0 min-h-[85vh]">
-          <div className="md:col-span-7 lg:col-span-5 text-white text-center md:text-left">
+          <div className="md:col-span-8 lg:col-span-6 text-white text-center md:text-left">
             <div className="inline-block bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.2em] mb-8">
               Accelerating African Narrative
             </div>
@@ -311,7 +348,6 @@ export default function LandingPage() {
               <div className="p-6 md:p-8 flex flex-col flex-grow">
                 <p className="text-[9px] font-prompt font-bold text-brand-dark-navy/40 uppercase tracking-widest mb-3">{item.tag}</p>
                 <h3 className="text-[15px] font-bold text-brand-dark-navy leading-snug mb-3">{item.title}</h3>
-                {/* line-clamp-3 ensures the description doesn't break the uniform height of the cards */}
                 <p className="text-[12px] font-prompt text-brand-dark-navy/60 line-clamp-3 mb-6 leading-relaxed flex-grow">{item.desc}</p>
                 <p className="text-[8px] font-prompt text-gray-300 uppercase tracking-widest font-medium mt-auto">{item.date}</p>
               </div>
@@ -324,8 +360,17 @@ export default function LandingPage() {
       <section className="bg-brand-dark-navy py-20 md:py-32 px-6 md:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 bg-brand-vibrant-blue aspect-video rounded-2xl relative shadow-2xl overflow-hidden group">
+            
+            {/* Added Impact Image */}
+            <Image 
+              src="/impact.jpg" 
+              alt="Measuring Our Impact" 
+              fill 
+              className="object-cover transition-transform duration-700 group-hover:scale-105" 
+            />
+            
+            <div className="absolute inset-0 bg-brand-dark-navy/40 transition-colors z-0"></div>
             <PlayButton />
-            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
           <div className="lg:col-span-6">
             <SectionHeader title="GTV Impact" light />
@@ -361,11 +406,9 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="lg:col-span-5 flex flex-col gap-4">
-            {[
-              { label: "ADVERTISE WITH GTV AFRIK", sub: "Reach Africa's decision makers & global diaspora" },
-              { label: "PARTNER WITH US", sub: "Advocacy, Campaigns & Media Production" },
-              { label: "BOOK AN APPOINTMENT", sub: "Talk to our team about your goals" }
-            ].map((link, i) => (
+            
+            {/* Added CTA Icons */}
+            {ctaLinks.map((link, i) => (
               <div 
                 key={i} 
                 data-cal-link={link.label === "BOOK AN APPOINTMENT" ? "gtv-afrik/30min" : undefined}
@@ -373,7 +416,9 @@ export default function LandingPage() {
                 className="bg-white/10 border border-white/5 p-5 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl"
               >
                 <div className="flex items-center gap-4 md:gap-6">
-                  <div className="w-12 md:w-16 h-10 md:h-12 bg-gray-300/20 rounded-md shrink-0"></div>
+                  <div className="w-12 md:w-16 h-10 md:h-12 bg-white/5 border border-white/10 rounded-md shrink-0 flex items-center justify-center">
+                    {link.icon}
+                  </div>
                   <div>
                     <h4 className="text-[10px] md:text-[11px] font-bold text-white uppercase tracking-widest">{link.label}</h4>
                     <p className="text-[9px] md:text-[10px] font-prompt text-white/50 mt-1.5 leading-relaxed">{link.sub}</p>

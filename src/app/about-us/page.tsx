@@ -82,9 +82,15 @@ export default function AboutPage() {
             <section className="py-16 md:py-24 lg:py-32 px-4 sm:px-6 md:px-8 lg:px-16 bg-white">
                 <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
                     <div className="col-span-1 lg:col-span-5">
-                        <div className="w-full aspect-[4/5] bg-brand-vibrant-blue relative shadow-xl rounded-lg overflow-hidden">
-                            <div className="absolute inset-0 bg-brand-dark-navy/10"></div>
-                            <div className="absolute top-4 left-4 bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[9px] font-bold uppercase tracking-widest">
+                        <div className="w-full aspect-[4/5] bg-brand-vibrant-blue relative shadow-xl rounded-lg overflow-hidden group">
+                            <Image 
+                                src="/about-megaphone.jpg" 
+                                alt="GTV Afrik Megaphone" 
+                                fill 
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-brand-dark-navy/20 mix-blend-multiply"></div>
+                            <div className="absolute top-4 left-4 bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[9px] font-bold uppercase tracking-widest z-10 shadow-md">
                                 Why Us
                             </div>
                         </div>

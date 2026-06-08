@@ -185,7 +185,7 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
         
-        {/* Right Side Background Video Container restricted to 50% width to prevent cutoff */}
+        {/* Right Side Background Video Container restricted to 50% width */}
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-[50%] z-0 hidden md:block pointer-events-none">
           <video
             src="/hero.mp4"
@@ -201,16 +201,16 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Diagonal Navy Left Side - Adjusted polygon to give text more space */}
+        {/* Diagonal Navy Left Side - Extended to push safety zone left */}
         <div
           className="absolute inset-0 bg-brand-dark-navy hidden md:block z-0"
-          style={{ clipPath: 'polygon(0 0, 55% 0, 45% 100%, 0% 100%)' }}
+          style={{ clipPath: 'polygon(0 0, 60% 0, 48% 100%, 0% 100%)' }}
         ></div>
         <div className="absolute inset-0 bg-brand-dark-navy md:hidden z-0"></div>
 
-        {/* Content - Increased col-span to constrain text better without cutting off */}
+        {/* Content - Added md:pr-12 to push text block safely to the left */}
         <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0 min-h-[85vh]">
-          <div className="md:col-span-8 lg:col-span-6 text-white text-center md:text-left">
+          <div className="md:col-span-7 lg:col-span-6 text-white text-center md:text-left md:pr-12">
             <div className="inline-block bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.2em] mb-8">
               Accelerating African Narrative
             </div>
@@ -235,15 +235,15 @@ export default function LandingPage() {
 
             <div className="flex gap-8 md:gap-12 justify-center md:justify-start">
               <div>
-                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">X+</h4>
+                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">7+</h4>
                 <p className="text-[8px] font-prompt font-medium uppercase tracking-widest text-white/40">Years of Impact</p>
               </div>
               <div>
-                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">XX+</h4>
+                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">100+</h4>
                 <p className="text-[8px] font-prompt font-medium uppercase tracking-widest text-white/40">Clients</p>
               </div>
               <div>
-                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">XX+</h4>
+                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">100+</h4>
                 <p className="text-[8px] font-prompt font-medium uppercase tracking-widest text-white/40">Clients</p>
               </div>
             </div>

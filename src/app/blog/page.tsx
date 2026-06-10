@@ -2,8 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CtaBanner from "@/components/CtaBanner";
 import Link from "next/link";
-// Temporarily commenting out Prisma so the page doesn't crash without a database
-// import prisma from "../../../lib/prisma";
+import prisma from "../../../lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
@@ -43,29 +42,18 @@ const EmptyState = ({ message, light = false }: { message: string; light?: boole
 );
 
 export default async function BlogPage() {
-    // --- TEMPORARY MOCK DATA TO BYPASS PRISMA CRASH ---
-    // const dbCategories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
-    const categories = ["All", "Headlines", "Breaking News", "GTV Content", "Politics", "International", "Entertainment", "Health", "Sports"];
+    // 1. Fetch DB Categories
+    const dbCategories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
+    const dynamicCats = ["All", ...dbCategories.map((c: any) => c.name)];
+    const categories = dynamicCats.length > 1 ? dynamicCats : ["All", "Headlines", "Breaking News", "GTV Content", "Politics", "International", "Entertainment", "Health", "Sports"];
 
-    /* const latestArticles = await prisma.article.findMany({
+    // 2. Fetch Latest Articles
+    const latestArticles = await prisma.article.findMany({
         where: { status: 'published' },
         orderBy: { publishedAt: 'desc' },
         take: 40,
         include: { categories: { include: { category: true } } }
     });
-    */
-    
-    // Mock articles so the UI has something to render
-    const mockDate = new Date().toISOString();
-    const latestArticles = [
-        { title: "Onoja (The Man): A Legacy of Service", slug: "onoja", thumbnail: "/onoja.jpg", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "Politics" } }] },
-        { title: "Navigating Personal Choice and Systemic Change", slug: "climate", thumbnail: "/climate.jpg", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "International" } }] },
-        { title: "Slavery: The Descendants of Empires", slug: "slavery", thumbnail: "/media.jpg", excerpt: "They tell you your history began in chains. But that is a lie they fed you to keep you small.", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "International" } }] },
-        { title: "Breaking: SEDC Announces New Infrastructure Funding", slug: "breaking-1", thumbnail: "/onoja.jpg", publishedAt: mockDate, categories: [{ category: { name: "Breaking News" } }] },
-        { title: "Global Climate Summit Reaches Historic Agreement", slug: "breaking-2", thumbnail: "/climate.jpg", publishedAt: mockDate, categories: [{ category: { name: "Breaking News" } }, { category: { name: "International" } }] },
-        { title: "GTV Exclusive: The Making of African Cinema", slug: "gtv-1", thumbnail: "/media.jpg", publishedAt: mockDate, categories: [{ category: { name: "GTV Content" } }, { category: { name: "Entertainment" } }] }
-    ];
-    // --------------------------------------------------
 
     const getArticles = (cat: string, limit: number) => {
         return latestArticles

@@ -79,7 +79,7 @@ const fivePillars = [
   { 
     num: "05", 
     title: "Advertising", 
-    desc: "Targeted reach across GTV Afrik's pan-African and diaspora audiences built for brands that want to be seen and remembered.",
+    desc: "Targeted reach across GTVAFRIK's pan-African and diaspora audiences built for brands that want to be seen and remembered.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -125,7 +125,7 @@ const featuredContent = [
 
 const ctaLinks = [
   { 
-    label: "ADVERTISE WITH GTV AFRIK", 
+    label: "ADVERTISE WITH GTVAFRIK", 
     sub: "Reach Africa's decision makers & global diaspora",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-yellow">
@@ -278,7 +278,8 @@ export default function LandingPage() {
       </section>
 
       {/* --- WHAT WE DO (5 PILLARS LAYOUT WITH ICONS) --- */}
-      <section className="bg-white py-16 md:py-32">
+      {/* Added id="pillars" and scroll-mt-24 for navbar navigation */}
+      <section id="pillars" className="bg-white py-16 md:py-32 scroll-mt-24">
         <div className="container mx-auto px-6 md:px-16">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 lg:mb-16 gap-6">
             <div>
@@ -297,7 +298,8 @@ export default function LandingPage() {
             {fivePillars.map((pillar) => (
               <div 
                 key={pillar.num} 
-                className="bg-[#F8F9FA] p-6 lg:p-8 flex flex-col justify-between h-[300px] lg:h-[420px] group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100 relative overflow-hidden rounded-sm"
+                id={pillar.title.toLowerCase()} // Auto-generates id="media", id="advocacy" etc.
+                className="bg-[#F8F9FA] p-6 lg:p-8 flex flex-col justify-between h-[300px] lg:h-[420px] group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100 relative overflow-hidden rounded-sm scroll-mt-32"
               >
                 <div>
                   {/* Icon Container */}
@@ -402,7 +404,7 @@ export default function LandingPage() {
               Let's Shape Africa's <br /> Story Together.
             </h2>
             <p className="font-prompt font-light text-[15px] text-white/70 max-w-md mx-auto md:mx-0 leading-relaxed mb-12">
-              Whether you're a multinational, a government agency, or an African brand — GTV Afrik gives your message the reach, depth, and credibility it deserves.
+              Whether you're a multinational, a government agency, or an African brand — GTVAFRIK gives your message the reach, depth, and credibility it deserves.
             </p>
           </div>
           <div className="lg:col-span-5 flex flex-col gap-4">

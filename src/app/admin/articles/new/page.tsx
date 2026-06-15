@@ -46,10 +46,42 @@ export default function NewArticle() {
     setCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
   };
 
-  const handleAddCustomCategory = () => {
-    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
-      setCategories(prev => [...prev, newCategory.trim()]);
+  // UPDATED: Now sends the new category to the database via your POST endpoint
+  const handleAddCustomCategory = async () => {
+    const catName = newCategory.trim();
+    
+    if (catName && !categories.includes(catName)) {
+      // 1. Instantly select it for the current article
+      setCategories(prev => [...prev, catName]);
+      
+      // 2. Clear the input box
       setNewCategory('');
+
+      // 3. Check if it already exists in the database lists
+      const existsGlobally = availableCategories.fixed.includes(catName) || availableCategories.custom.includes(catName);
+      
+      // 4. If it's truly new, save it to the database
+      if (!existsGlobally) {
+        try {
+          const res = await fetch('/api/categories', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: catName }),
+          });
+          
+          if (res.ok) {
+            // Add it to the purple "Custom" tags list on the screen so it is permanently visible
+            setAvailableCategories(prev => ({
+              ...prev,
+              custom: [...prev.custom, catName]
+            }));
+          } else {
+            console.error("Failed to save new category to database");
+          }
+        } catch (error) {
+          console.error("Error creating category:", error);
+        }
+      }
     }
   };
 

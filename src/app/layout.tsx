@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { Prompt } from "next/font/google";
+import { Prompt, Inter } from "next/font/google";
 import "./globals.css";
 
 const prompt = Prompt({
@@ -9,25 +8,14 @@ const prompt = Prompt({
   variable: "--font-prompt",
 });
 
-// Configure your custom font
-const gudlak = localFont({
-  src: [
-    {
-      path: "../../public/fonts/GCGudlakDemo-Regular.ttf", // Make sure this matches your file name exactly
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/GCGudlakDemo-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-gudlak",
+// Import the clean, highly legible Inter font
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "GTV AFRIK | Media",
+  title: "GTVAFRIK | Media",
   description: "Accelerating African Narrative",
 };
 
@@ -38,9 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${gudlak.variable} ${prompt.variable} font-prompt antialiased`}>
+      {/* Applied the inter font as the default sans-serif font */}
+      <body className={`${inter.variable} ${prompt.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
   );
 }
+

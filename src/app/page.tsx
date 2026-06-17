@@ -123,7 +123,6 @@ const featuredContent = [
   }
 ];
 
-// Added hrefs for the Contact pages
 const ctaLinks = [
   { 
     label: "ADVERTISE WITH GTVAFRIK", 
@@ -152,7 +151,7 @@ const ctaLinks = [
   { 
     label: "BOOK AN APPOINTMENT", 
     sub: "Talk to our team about your goals",
-    href: "#", // Cal.com handles this
+    href: "#", 
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-yellow">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -165,14 +164,12 @@ const ctaLinks = [
 ];
 
 export default function LandingPage() {
-  // Added state for the Featured Content tabs
   const [activeContentTab, setActiveContentTab] = useState("All");
   const contentTabs = ["All", "Latest Shows", "Documentaries", "Podcasts", "Short Films"];
 
   return (
     <div className="min-h-screen bg-white font-prompt overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
       
-      {/* Custom Keyframes for Marquee */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scroll {
           0% { transform: translateX(0); }
@@ -193,7 +190,6 @@ export default function LandingPage() {
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col md:flex-row items-center overflow-hidden bg-brand-dark-navy md:bg-[#F8F9FA]">
         
-        {/* Right Side Background Video Container restricted to 50% width */}
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-[50%] z-0 hidden md:block pointer-events-none">
           <video
             src="/hero.mp4"
@@ -209,14 +205,12 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Diagonal Navy Left Side - Extended to push safety zone left */}
         <div
           className="absolute inset-0 bg-brand-dark-navy hidden md:block z-0"
           style={{ clipPath: 'polygon(0 0, 60% 0, 48% 100%, 0% 100%)' }}
         ></div>
         <div className="absolute inset-0 bg-brand-dark-navy md:hidden z-0"></div>
 
-        {/* Content - Added md:pr-12 to push text block safely to the left */}
         <div className="container mx-auto px-6 md:px-16 relative z-10 grid grid-cols-1 md:grid-cols-12 items-center py-16 md:py-0 min-h-[85vh]">
           <div className="md:col-span-7 lg:col-span-6 text-white text-center md:text-left md:pr-12">
             <div className="inline-block bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-sm text-[8.5px] font-bold uppercase tracking-[0.2em] mb-8">
@@ -265,7 +259,6 @@ export default function LandingPage() {
           <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-brand-dark-navy/30 font-prompt text-center md:text-left">PARTNERS & CLIENTS</p>
         </div>
         
-        {/* Marquee Wrapper */}
         <div className="relative w-full overflow-hidden flex items-center">
           <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
@@ -300,7 +293,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* 5 Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {fivePillars.map((pillar) => (
               <div 
@@ -309,7 +301,6 @@ export default function LandingPage() {
                 className="bg-[#F8F9FA] p-6 lg:p-8 flex flex-col justify-between h-[300px] lg:h-[420px] group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100 relative overflow-hidden rounded-sm scroll-mt-32"
               >
                 <div>
-                  {/* Icon Container */}
                   <div className="w-10 h-10 bg-brand-yellow/30 text-brand-dark-navy rounded-md mb-6 flex items-center justify-center transition-transform group-hover:scale-110">
                     {pillar.icon}
                   </div>
@@ -426,13 +417,13 @@ export default function LandingPage() {
             {/* Functional CTA Block Links */}
             {ctaLinks.map((link, i) => {
               const isCal = link.label === "BOOK AN APPOINTMENT";
-              // If it's the calendar popup, render a div. If it's a contact link, render a Next.js Link.
               const Wrapper = isCal ? "div" : Link;
               
               return (
                 <Wrapper 
                   key={i} 
                   href={!isCal ? link.href : ""}
+                  
                   data-cal-link={isCal ? "gtv-afrik-bsbmax/30min" : undefined}
                   data-cal-config={isCal ? '{"layout":"month_view"}' : undefined}
                   className="bg-white/10 border border-white/5 p-5 md:p-8 flex items-center justify-between group cursor-pointer hover:bg-white/20 transition-all rounded-xl"

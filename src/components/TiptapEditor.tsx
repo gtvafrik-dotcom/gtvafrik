@@ -129,7 +129,8 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: 'prose prose-lg max-w-none focus:outline-none min-h-[450px] px-8 py-6 text-[#2B3674]',
+        // Removed Tailwind's default typography class and added standard utility classes
+        class: 'focus:outline-none min-h-[450px] px-8 py-6 text-[#2B3674] font-sans',
       },
     },
     onUpdate: ({ editor }) => {
@@ -138,7 +139,63 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
   });
 
   return (
-    <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+    <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm relative">
+      
+      {/* Overriding Tailwind's Reset CSS for the Editor Content */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .ProseMirror > * + * {
+          margin-top: 1em;
+        }
+        .ProseMirror strong {
+          font-weight: 700 !important;
+        }
+        .ProseMirror em {
+          font-style: italic !important;
+        }
+        .ProseMirror h1 {
+          font-size: 2.25rem !important;
+          font-weight: 800 !important;
+          line-height: 1.2;
+          margin-bottom: 0.5em;
+        }
+        .ProseMirror h2 {
+          font-size: 1.875rem !important;
+          font-weight: 700 !important;
+          line-height: 1.3;
+          margin-bottom: 0.5em;
+        }
+        .ProseMirror h3 {
+          font-size: 1.5rem !important;
+          font-weight: 600 !important;
+          line-height: 1.4;
+          margin-bottom: 0.5em;
+        }
+        .ProseMirror ul {
+          list-style-type: disc !important;
+          padding-left: 1.5rem !important;
+        }
+        .ProseMirror ol {
+          list-style-type: decimal !important;
+          padding-left: 1.5rem !important;
+        }
+        .ProseMirror blockquote {
+          border-left: 4px solid #E2E8F0 !important;
+          padding-left: 1rem !important;
+          color: #64748B !important;
+          font-style: italic !important;
+          margin-top: 1.5em;
+          margin-bottom: 1.5em;
+        }
+        .ProseMirror a {
+          color: #2563EB !important;
+          text-decoration: underline !important;
+        }
+        /* Style for text strikethrough */
+        .ProseMirror s {
+          text-decoration: line-through !important;
+        }
+      `}} />
+
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
     </div>

@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import Link from "next/link";
 
 const SectionHeader = ({ title, light = false }: { title: string; light?: boolean }) => (
     <div className="flex items-center gap-2 mb-6">
@@ -63,21 +64,6 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* --- STATS STRIP --- */}
-            <section className="bg-brand-vibrant-blue py-8 md:py-16 px-4 sm:px-6 md:px-8 lg:px-16">
-                <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row justify-between items-center text-brand-yellow gap-8 sm:gap-0">
-                    <div className="text-center">
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 tracking-tighter">50k+</h3>
-                    </div>
-                    <div className="text-center">
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 tracking-tighter">50k+</h3>
-                    </div>
-                    <div className="text-center">
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 tracking-tighter">50k+</h3>
-                    </div>
-                </div>
-            </section>
-
             {/* --- WHY GTVAFRIK SECTION --- */}
             <section className="py-16 md:py-24 lg:py-32 px-4 sm:px-6 md:px-8 lg:px-16 bg-white">
                 <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
@@ -85,7 +71,7 @@ export default function AboutPage() {
                         <div className="w-full aspect-[4/5] bg-brand-vibrant-blue relative shadow-xl rounded-lg overflow-hidden group">
                             <Image 
                                 src="/about-megaphone.jpg" 
-                                alt="GTV Afrik Megaphone" 
+                                alt="GTVAFRIK Megaphone" 
                                 fill 
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
@@ -180,16 +166,9 @@ export default function AboutPage() {
                     <p className="font-prompt text-[14px] md:text-[16px] text-brand-dark-navy/80 mb-8 font-medium">
                         Ready to be part of it? Let's Work Together
                     </p>
-                    <button className="bg-brand-dark-navy text-white px-8 py-3.5 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-lg hover:bg-opacity-90 transition-all">
+                    <Link href="/contact" className="inline-block bg-brand-dark-navy text-white px-8 py-3.5 rounded-md font-bold text-[10px] uppercase tracking-widest shadow-lg hover:bg-opacity-90 transition-all">
                         Contact Us
-                    </button>
-                </div>
-            </section>
-
-            {/* --- PARTNERS STRIP --- */}
-            <section className="bg-white py-8 md:py-14 border-b border-gray-50">
-                <div className="px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1200px] mx-auto">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-brand-dark-navy/20 font-prompt text-center md:text-left">Partners & Clients</p>
+                    </Link>
                 </div>
             </section>
 

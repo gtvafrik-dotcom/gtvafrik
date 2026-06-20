@@ -2,8 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CtaBanner from "@/components/CtaBanner";
 import Link from "next/link";
-// Temporarily commenting out Prisma so the page doesn't crash without a database
-// import prisma from "../../../lib/prisma";
+import prisma from "../../../lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
@@ -22,14 +21,13 @@ const SectionHeader = ({ title, light = false, viewAll = true }: { title: string
 );
 
 const PlayButton = ({ small = false }: { small?: boolean }) => (
-    <div className="absolute inset-0 flex items-center justify-center z-10">
+    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
         <div className={`${small ? 'w-10 h-10' : 'w-12 h-12'} bg-brand-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer`}>
             <div className={`w-0 h-0 border-t-[7px] border-t-transparent border-l-[13px] border-l-brand-dark-navy border-b-[7px] border-b-transparent ml-1`}></div>
         </div>
     </div>
 );
 
-// Formats publishedAt; returns null if date is missing
 const formatDate = (date: Date | string | null | undefined) => {
     if (!date) return null;
     return new Intl.DateTimeFormat('en-GB', {
@@ -37,35 +35,60 @@ const formatDate = (date: Date | string | null | undefined) => {
     }).format(new Date(date));
 };
 
-// Shown when a category section has no published articles
 const EmptyState = ({ message, light = false }: { message: string; light?: boolean }) => (
     <p className={`font-prompt text-sm py-8 ${light ? 'text-white/30' : 'text-gray-400'}`}>{message}</p>
 );
 
-export default async function BlogPage() {
-    // --- TEMPORARY MOCK DATA TO BYPASS PRISMA CRASH ---
-    // const dbCategories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
-    const categories = ["All", "Headlines", "Breaking News", "GTV Content", "Politics", "International", "Entertainment", "Health", "Sports"];
+// Reusable Uniform Card Component
+const ArticleCard = ({ article, defaultTag, isBreaking = false, isVideo = false }: { article: any, defaultTag: string, isBreaking?: boolean, isVideo?: boolean }) => {
+    const tag = article.categories?.[0]?.category.name || defaultTag;
+    return (
+        <Link href={`/blog/${article.slug}`} className="relative rounded-2xl overflow-hidden shadow-lg group block aspect-[4/5] md:aspect-auto md:h-[420px] w-full">
+            {article.thumbnail ? (
+                <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />
+            ) : (
+                <div className="absolute inset-0 w-full h-full bg-brand-vibrant-blue group-hover:scale-105 transition-transform duration-700"></div>
+            )}
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/95 via-[#0B1530]/30 to-transparent z-0 transition-opacity group-hover:opacity-90"></div>
+            
+            <div className={`absolute top-4 left-4 ${isBreaking ? 'bg-[#D42027] text-white' : 'bg-brand-yellow text-brand-dark-navy'} px-3 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest z-10`}>
+                {isBreaking ? 'Breaking' : tag}
+            </div>
 
-    /* const latestArticles = await prisma.article.findMany({
+            {isVideo && <PlayButton small />}
+
+            <div className="absolute bottom-6 left-6 right-6 z-10 flex flex-col justify-end">
+                <h3 className="text-[18px] md:text-[20px] font-bold text-white leading-snug mb-4 line-clamp-3">{article.title}</h3>
+                <div className="flex items-center justify-between border-t border-white/20 pt-4">
+                    <p className="text-[8px] font-prompt text-white/60 uppercase tracking-widest font-medium">{formatDate(article.publishedAt) ?? 'Recent'}</p>
+                    <p className="text-[10px] text-brand-yellow font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
+                        {isVideo ? 'Watch' : 'Read More'} <span>→</span>
+                    </p>
+                </div>
+            </div>
+        </Link>
+    );
+};
+
+export default async function BlogPage() {
+    const dbCategories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
+    const dynamicCats = ["All", ...dbCategories.map((c: any) => c.name)];
+    
+    // Define standard categories to prevent duplicates
+    const STANDARD_CATS = ["Headlines", "Breaking News", "GTV Content", "Politics", "International", "Entertainment", "Health", "Sports"];
+    
+    // Extract purely custom categories created in the admin panel
+    const customCategories = dynamicCats.filter(cat => cat !== "All" && !STANDARD_CATS.includes(cat));
+    
+    const categories = dynamicCats.length > 1 ? dynamicCats : ["All", ...STANDARD_CATS];
+
+    const latestArticles = await prisma.article.findMany({
         where: { status: 'published' },
         orderBy: { publishedAt: 'desc' },
         take: 40,
         include: { categories: { include: { category: true } } }
     });
-    */
-    
-    // Mock articles so the UI has something to render
-    const mockDate = new Date().toISOString();
-    const latestArticles = [
-        { title: "Onoja (The Man): A Legacy of Service", slug: "onoja", thumbnail: "/onoja.jpg", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "Politics" } }] },
-        { title: "Navigating Personal Choice and Systemic Change", slug: "climate", thumbnail: "/climate.jpg", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "International" } }] },
-        { title: "Slavery: The Descendants of Empires", slug: "slavery", thumbnail: "/media.jpg", excerpt: "They tell you your history began in chains. But that is a lie they fed you to keep you small.", publishedAt: mockDate, categories: [{ category: { name: "Headlines" } }, { category: { name: "International" } }] },
-        { title: "Breaking: SEDC Announces New Infrastructure Funding", slug: "breaking-1", thumbnail: "/onoja.jpg", publishedAt: mockDate, categories: [{ category: { name: "Breaking News" } }] },
-        { title: "Global Climate Summit Reaches Historic Agreement", slug: "breaking-2", thumbnail: "/climate.jpg", publishedAt: mockDate, categories: [{ category: { name: "Breaking News" } }, { category: { name: "International" } }] },
-        { title: "GTV Exclusive: The Making of African Cinema", slug: "gtv-1", thumbnail: "/media.jpg", publishedAt: mockDate, categories: [{ category: { name: "GTV Content" } }, { category: { name: "Entertainment" } }] }
-    ];
-    // --------------------------------------------------
 
     const getArticles = (cat: string, limit: number) => {
         return latestArticles
@@ -83,7 +106,8 @@ export default async function BlogPage() {
     const sports       = getArticles("Sports", 3);
 
     return (
-        <div className="min-h-screen bg-white font-gudlak overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
+        // Replaced font-gudlak with font-sans
+        <div className="min-h-screen bg-white font-sans overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
 
             {/* --- TOP BAR --- */}
             <div className="hidden md:flex bg-[#0B1530] text-white/60 px-16 py-2.5 justify-between items-center text-[9px] font-prompt font-medium tracking-wider border-b border-white/5">
@@ -124,28 +148,10 @@ export default async function BlogPage() {
                     ))}
                 </div>
 
-                {/* UNIFORM GRID FOR HEADLINES - Image Backgrounds + Read More */}
                 {headlines.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {headlines.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="relative rounded-2xl overflow-hidden shadow-lg group block aspect-[4/5] md:aspect-auto md:h-[420px]">
-                                {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/90 via-[#0B1530]/20 to-transparent z-0 transition-opacity group-hover:opacity-90"></div>
-                                
-                                <div className="absolute top-4 left-4 bg-brand-yellow text-brand-dark-navy px-3 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest z-10">
-                                    Headline
-                                </div>
-
-                                <div className="absolute bottom-6 left-6 right-6 z-10 flex flex-col justify-end">
-                                    <h3 className="text-[18px] md:text-[22px] font-bold text-white leading-snug mb-4 line-clamp-3">{article.title}</h3>
-                                    <div className="flex items-center justify-between border-t border-white/20 pt-4">
-                                        <p className="text-[8px] font-prompt text-white/60 uppercase tracking-widest font-medium">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[10px] text-brand-yellow font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="Headline" />
                         ))}
                     </div>
                 ) : (
@@ -163,31 +169,13 @@ export default async function BlogPage() {
                 </div>
             )}
 
-            {/* --- BREAKING NEWS (UNIFORM GRID) --- */}
+            {/* --- BREAKING NEWS --- */}
             <section className="px-6 md:px-16 py-16 md:py-28 bg-[#F8F9FF]">
                 <SectionHeader title="Breaking News" />
                 {breaking.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {breaking.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
-                                <div className="aspect-[4/3] bg-brand-vibrant-blue relative overflow-hidden shrink-0">
-                                    {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                    <span className="absolute top-4 left-4 z-10 bg-[#D42027] text-white text-[9px] px-3 py-1 rounded-sm font-bold uppercase tracking-widest font-prompt shadow-lg">Breaking</span>
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                    {article.categories?.[0]?.category.name && (
-                                        <p className="text-[9px] font-bold text-brand-vibrant-blue uppercase tracking-widest mb-3 font-prompt">{article.categories[0].category.name}</p>
-                                    )}
-                                    <h3 className="text-[16px] md:text-[18px] font-bold text-brand-dark-navy leading-snug mb-4 line-clamp-3">{article.title}</h3>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] font-prompt text-gray-400 uppercase tracking-widest font-medium">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="Breaking" isBreaking />
                         ))}
                     </div>
                 ) : (
@@ -199,27 +187,9 @@ export default async function BlogPage() {
             <section className="bg-brand-dark-navy px-6 md:px-16 py-20 md:py-28 text-white">
                 <SectionHeader title="GTV CONTENT" light />
                 {gtv.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {gtv.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="bg-white rounded-2xl overflow-hidden shadow-2xl group cursor-pointer block flex flex-col h-full">
-                                <div className="aspect-video bg-brand-vibrant-blue relative overflow-hidden shrink-0">
-                                    {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                    <PlayButton />
-                                </div>
-                                <div className="p-6 md:p-8 text-brand-dark-navy flex flex-col flex-grow">
-                                    {article.categories?.[0]?.category.name && (
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-3 font-prompt">{article.categories[0].category.name} · Videos</p>
-                                    )}
-                                    <h3 className="text-[14px] md:text-[15px] font-bold leading-snug mb-4 line-clamp-2">{article.title}</h3>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Watch <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="GTV Content" isVideo />
                         ))}
                     </div>
                 ) : (
@@ -231,24 +201,9 @@ export default async function BlogPage() {
             <section className="px-6 md:px-16 py-16 md:py-28 bg-[#F4F6FF]">
                 <SectionHeader title="Politics" />
                 {politics.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {politics.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-shadow flex flex-col h-full group">
-                                <div className="aspect-[4/3] bg-gray-300 relative overflow-hidden shrink-0">
-                                    {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                    <p className="text-[9px] font-bold text-brand-dark-navy uppercase tracking-widest mb-3 font-prompt">Politics</p>
-                                    <h3 className="text-[15px] md:text-[17px] font-bold text-brand-dark-navy leading-snug mb-4 line-clamp-3">{article.title}</h3>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="Politics" />
                         ))}
                     </div>
                 ) : (
@@ -256,29 +211,13 @@ export default async function BlogPage() {
                 )}
             </section>
 
-            {/* --- INTERNATIONAL (UNIFORM GRID) --- */}
+            {/* --- INTERNATIONAL --- */}
             <section className="px-6 md:px-16 py-16 md:py-28 bg-white">
                 <SectionHeader title="International" />
                 {international.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {international.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col h-full">
-                                <div className="aspect-[4/3] bg-brand-vibrant-blue relative overflow-hidden shrink-0">
-                                    {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                    <p className="text-[9px] font-bold text-brand-vibrant-blue uppercase tracking-widest mb-3 font-prompt">Global</p>
-                                    <h3 className="text-[16px] md:text-[18px] font-bold text-brand-dark-navy leading-snug mb-3 line-clamp-3">{article.title}</h3>
-                                    {article.excerpt && <p className="text-[12px] font-prompt text-gray-500 line-clamp-2 mb-4">{article.excerpt}</p>}
-                                    
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] font-prompt text-gray-400 uppercase tracking-widest font-medium">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="Global" />
                         ))}
                     </div>
                 ) : (
@@ -286,93 +225,65 @@ export default async function BlogPage() {
                 )}
             </section>
 
-            {/* --- ENTERTAINMENT & HEALTH --- */}
-            <div className="px-6 md:px-16 py-10 md:py-28 bg-[#F4F6FF] flex flex-col md:grid md:grid-cols-2 gap-16 md:gap-20">
-                <section>
-                    <SectionHeader title="Entertainment" />
-                    {entertainment.length > 0 ? (
-                        <>
-                            <Link href={`/blog/${entertainment[0].slug}`} className="bg-white rounded-2xl overflow-hidden mb-6 md:mb-10 shadow-sm block group flex flex-col">
-                                <div className="aspect-video bg-brand-vibrant-blue relative overflow-hidden shrink-0">
-                                    {entertainment[0].thumbnail && <img src={entertainment[0].thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={entertainment[0].title} />}
-                                    <PlayButton />
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                    {entertainment[0].categories?.[0]?.category.name && (
-                                        <p className="text-[9px] font-bold text-brand-dark-navy/60 uppercase tracking-widest mb-2 font-prompt">{entertainment[0].categories[0].category.name}</p>
-                                    )}
-                                    <h3 className="text-[15px] md:text-[16px] font-bold text-brand-dark-navy leading-snug mb-4">{entertainment[0].title}</h3>
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">{formatDate(entertainment[0].publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
-                        </>
-                    ) : (
-                        <EmptyState message="No entertainment articles published yet." />
-                    )}
-                </section>
+            {/* --- ENTERTAINMENT --- */}
+            <section className="px-6 md:px-16 py-16 md:py-20 bg-[#F4F6FF]">
+                <SectionHeader title="Entertainment" />
+                {entertainment.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        {entertainment.map((article: any, i: number) => (
+                            <ArticleCard key={i} article={article} defaultTag="Entertainment" />
+                        ))}
+                    </div>
+                ) : (
+                    <EmptyState message="No entertainment articles published yet." />
+                )}
+            </section>
 
-                <section>
-                    <SectionHeader title="Health" />
-                    {health.length > 0 ? (
-                        <>
-                            <Link href={`/blog/${health[0].slug}`} className="bg-white rounded-2xl overflow-hidden mb-6 md:mb-10 shadow-sm block group flex flex-col">
-                                <div className="aspect-video bg-brand-vibrant-blue relative overflow-hidden shrink-0">
-                                    {health[0].thumbnail && <img src={health[0].thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={health[0].title} />}
-                                    <PlayButton />
-                                </div>
-                                <div className="p-6 md:p-8 flex flex-col flex-grow">
-                                    <p className="text-[9px] font-bold text-brand-dark-navy/60 uppercase tracking-widest mb-2 font-prompt">Health</p>
-                                    <h3 className="text-[15px] md:text-[16px] font-bold text-brand-dark-navy leading-snug mb-4">{health[0].title}</h3>
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">{formatDate(health[0].publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
-                        </>
-                    ) : (
-                        <EmptyState message="No health articles published yet." />
-                    )}
-                </section>
-            </div>
+            {/* --- HEALTH --- */}
+            <section className="px-6 md:px-16 py-16 md:py-20 bg-white">
+                <SectionHeader title="Health" />
+                {health.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        {health.map((article: any, i: number) => (
+                            <ArticleCard key={i} article={article} defaultTag="Health" />
+                        ))}
+                    </div>
+                ) : (
+                    <EmptyState message="No health articles published yet." />
+                )}
+            </section>
 
             {/* --- SPORTS --- */}
             <section className="bg-brand-dark-navy px-6 md:px-16 py-20 md:py-28 text-white">
                 <SectionHeader title="Sports" light />
                 {sports.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {sports.map((article: any, i: number) => (
-                            <Link href={`/blog/${article.slug}`} key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg group cursor-pointer block flex flex-col h-full">
-                                <div className="aspect-[4/3] bg-brand-vibrant-blue group-hover:opacity-90 transition-opacity relative overflow-hidden shrink-0">
-                                    {article.thumbnail && <img src={article.thumbnail} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />}
-                                </div>
-                                <div className="p-6 md:p-8 text-brand-dark-navy flex flex-col flex-grow">
-                                    {article.categories?.[0]?.category.name && (
-                                        <p className="text-[9px] font-bold text-brand-dark-navy/60 uppercase tracking-widest mb-3 font-prompt">{article.categories[0].category.name}</p>
-                                    )}
-                                    <h3 className="text-[15px] font-bold leading-tight mb-4 line-clamp-3">{article.title}</h3>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                                        <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest font-prompt">{formatDate(article.publishedAt) ?? 'Recent'}</p>
-                                        <p className="text-[9px] text-brand-vibrant-blue font-bold uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Read More <span>→</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                            <ArticleCard key={i} article={article} defaultTag="Sports" />
                         ))}
                     </div>
                 ) : (
                     <EmptyState message="No sports articles published yet." light />
                 )}
             </section>
+
+            {/* --- DYNAMIC CUSTOM CATEGORIES --- */}
+            {/* Automatically generates sections for new categories created in the admin panel */}
+            {customCategories.map(cat => {
+                const catArticles = getArticles(cat, 6);
+                if (catArticles.length === 0) return null;
+
+                return (
+                    <section key={cat} className="px-6 md:px-16 py-16 md:py-20 bg-[#F8F9FA] border-t border-gray-200">
+                        <SectionHeader title={cat} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                            {catArticles.map((article: any, i: number) => (
+                                <ArticleCard key={i} article={article} defaultTag={cat} />
+                            ))}
+                        </div>
+                    </section>
+                );
+            })}
 
             <CtaBanner />
             <Footer />

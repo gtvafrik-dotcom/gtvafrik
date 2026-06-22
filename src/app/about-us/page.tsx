@@ -37,11 +37,15 @@ export default function AboutPage() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="bg-brand-yellow text-brand-dark-navy px-6 py-2.5 rounded-sm font-bold text-[9px] uppercase tracking-widest transition-all hover:brightness-110">
+                            <Link href="/contact" className="bg-brand-yellow text-brand-dark-navy px-6 py-2.5 rounded-sm font-bold text-[9px] uppercase tracking-widest transition-all hover:brightness-110 text-center">
                                 Work with us
-                            </button>
-                            <button className="border border-white/20 text-white px-6 py-2.5 rounded-sm font-bold text-[9px] uppercase tracking-widest hover:bg-white/5 transition-all">
-                                Explore our work
+                            </Link>
+                            <button 
+                                data-cal-link="gtv-afrik-bsbmax/30min"
+                                data-cal-config='{"layout":"month_view"}'
+                                className="border border-white/20 text-white px-6 py-2.5 rounded-sm font-bold text-[9px] uppercase tracking-widest hover:bg-white/5 transition-all text-center cursor-pointer"
+                            >
+                                Book an appointment
                             </button>
                         </div>
                     </div>

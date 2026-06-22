@@ -1,61 +1,71 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import prisma from '../../../../lib/prisma';
 
-const SETTINGS_PATH = path.join(process.cwd(), 'data', 'settings.json');
-
-const DEFAULT_SETTINGS = {
-  site: {
-    name: 'GTV Afrik',
-    tagline: 'Shaping the African Narrative',
-    description: '',
-    logo: '',
-    favicon: '',
-  },
-  social: {
-    twitter: '',
-    facebook: '',
-    instagram: '',
-    youtube: '',
-    tiktok: '',
-  },
-  notifications: {
-    emailOnNewArticle: false,
-    emailOnComment: false,
-    emailAddress: '',
-  },
-};
-
-function readSettings() {
-  if (!existsSync(SETTINGS_PATH)) return DEFAULT_SETTINGS;
-  try {
-    return JSON.parse(readFileSync(SETTINGS_PATH, 'utf-8'));
-  } catch {
-    return DEFAULT_SETTINGS;
+// Helper to ensure a settings row always exists
+async function getSettingsRow() {
+  let settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
+  if (!settings) {
+    settings = await prisma.siteSettings.create({ data: { id: 1 } });
   }
-}
-
-function writeSettings(data: object) {
-  const dir = path.dirname(SETTINGS_PATH);
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  writeFileSync(SETTINGS_PATH, JSON.stringify(data, null, 2));
+  return settings;
 }
 
 export async function GET() {
-  return NextResponse.json({ settings: readSettings() });
+  try {
+    const dbSettings = await getSettingsRow();
+    
+    // Format to match what the frontend expects
+    const formattedSettings = {
+      site: {
+        name: dbSettings.siteName,
+        tagline: dbSettings.tagline,
+        description: dbSettings.description,
+        logo: dbSettings.logo,
+      },
+      social: {
+        twitter: dbSettings.twitter,
+        facebook: dbSettings.facebook,
+        instagram: dbSettings.instagram,
+        youtube: dbSettings.youtube,
+        tiktok: dbSettings.tiktok,
+      },
+      notifications: {
+        emailOnNewArticle: dbSettings.emailOnNewArticle,
+        emailOnComment: dbSettings.emailOnComment,
+        emailAddress: dbSettings.emailAddress,
+      }
+    };
+
+    return NextResponse.json({ settings: formattedSettings });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to load settings' }, { status: 500 });
+  }
 }
 
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const current = readSettings();
-    const merged = {
-      site: { ...current.site, ...body.site },
-      social: { ...current.social, ...body.social },
-      notifications: { ...current.notifications, ...body.notifications },
-    };
-    writeSettings(merged);
-    return NextResponse.json({ settings: merged });
+    await getSettingsRow(); // Ensure row exists before updating
+
+    const updated = await prisma.siteSettings.update({
+      where: { id: 1 },
+      data: {
+        siteName: body.site?.name,
+        tagline: body.site?.tagline,
+        description: body.site?.description,
+        logo: body.site?.logo,
+        twitter: body.social?.twitter,
+        facebook: body.social?.facebook,
+        instagram: body.social?.instagram,
+        youtube: body.social?.youtube,
+        tiktok: body.social?.tiktok,
+        emailOnNewArticle: body.notifications?.emailOnNewArticle,
+        emailOnComment: body.notifications?.emailOnComment,
+        emailAddress: body.notifications?.emailAddress,
+      }
+    });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
   }

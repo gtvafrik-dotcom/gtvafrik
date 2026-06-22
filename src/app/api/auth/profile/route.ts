@@ -1,62 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs'; // Change this to 'bcrypt' if that is the library you have installed
+import prisma from '../../../../lib/prisma';
 
-const SETTINGS_PATH = path.join(process.cwd(), 'data', 'settings.json');
-
-const DEFAULT_SETTINGS = {
-  site: {
-    name: 'GTV Afrik',
-    tagline: 'Shaping the African Narrative',
-    description: '',
-    logo: '',
-    favicon: '',
-  },
-  social: {
-    twitter: '',
-    facebook: '',
-    instagram: '',
-    youtube: '',
-    tiktok: '',
-  },
-  notifications: {
-    emailOnNewArticle: false,
-    emailOnComment: false,
-    emailAddress: '',
-  },
-};
-
-function readSettings() {
-  if (!existsSync(SETTINGS_PATH)) return DEFAULT_SETTINGS;
-  try {
-    return JSON.parse(readFileSync(SETTINGS_PATH, 'utf-8'));
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
-}
-
-function writeSettings(data: object) {
-  const dir = path.dirname(SETTINGS_PATH);
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  writeFileSync(SETTINGS_PATH, JSON.stringify(data, null, 2));
-}
-
-export async function GET() {
-  return NextResponse.json({ settings: readSettings() });
-}
+const JWT_SECRET = process.env.JWT_SECRET || 'gtvafrik-super-secret-jwt-key-2026';
 
 export async function PUT(request: NextRequest) {
   try {
+    // 1. Verify the user's session token
+    const token = request.cookies.get('token')?.value || 
+                  request.headers.get('authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as any;
+    } catch (err) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = decoded.userId;
+
+    // 2. Read the new profile data sent from the frontend
     const body = await request.json();
-    const current = readSettings();
-    const merged = {
-      site: { ...current.site, ...body.site },
-      social: { ...current.social, ...body.social },
-      notifications: { ...current.notifications, ...body.notifications },
+    const { name, email, currentPassword, newPassword } = body;
+
+    // 3. Find the user in the database
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // 4. Prepare the data payload to update
+    const updateData: any = { 
+      name: name?.trim(), 
+      email: email?.trim() 
     };
-    writeSettings(merged);
-    return NextResponse.json({ settings: merged });
+
+    // 5. Securely handle password changes if the user typed a new one
+    if (newPassword) {
+      if (!currentPassword) {
+        return NextResponse.json({ error: 'Current password is required to set a new password' }, { status: 400 });
+      }
+
+      // Verify the current password matches what is in the database
+      const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!isValidPassword) {
+        return NextResponse.json({ error: 'Incorrect current password' }, { status: 401 });
+      }
+
+      // Hash the new password before saving it
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    // 6. Save the changes to the database
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      user: { 
+        id: updatedUser.id, 
+        name: updatedUser.name, 
+        email: updatedUser.email 
+      } 
+    });
+
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
+    console.error('Profile update error:', error);
+    return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs'; // Change this to 'bcrypt' if that is the library you have installed
-import prisma from '../../../../lib/prisma';
+import prisma from '../../../../../lib/prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'gtvafrik-super-secret-jwt-key-2026';
 

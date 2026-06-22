@@ -58,3 +58,21 @@ model ArticleCategory {
   @@id([articleId, categoryId])
   @@map("article_categories")
 }
+
+model SiteSettings {
+  id                Int     @id @default(1)
+  siteName          String  @default("GTV Afrik")
+  tagline           String  @default("Shaping the African Narrative")
+  description       String  @default("")
+  logo              String  @default("")
+  twitter           String  @default("")
+  facebook          String  @default("")
+  instagram         String  @default("")
+  youtube           String  @default("")
+  tiktok            String  @default("")
+  emailOnNewArticle Boolean @default(false)
+  emailOnComment    Boolean @default(false)
+  emailAddress      String  @default("")
+
+  @@map("site_settings")
+}

@@ -230,9 +230,14 @@ export default function LandingPage() {
               <Link href="/contact" className="bg-brand-yellow text-brand-dark-navy px-8 py-2.5 rounded-md font-bold text-[9px] uppercase tracking-widest shadow-lg transition-transform active:scale-95 text-center">
                 Work with us
               </Link>
-              <Link href="/#pillars" className="border border-white/20 text-white px-8 py-2.5 rounded-md font-bold text-[9px] uppercase tracking-widest hover:bg-white/5 transition-colors text-center">
-                Explore our work
-              </Link>
+              {/* Changed this to a Book an Appointment button using the exact Cal.com code */}
+              <button 
+                data-cal-link="gtv-afrik-bsbmax/30min"
+                data-cal-config='{"layout":"month_view"}'
+                className="border border-white/20 text-white px-8 py-2.5 rounded-md font-bold text-[9px] uppercase tracking-widest hover:bg-white/5 transition-colors text-center cursor-pointer"
+              >
+                Book an appointment
+              </button>
             </div>
 
             <div className="flex gap-8 md:gap-12 justify-center md:justify-start">
@@ -244,10 +249,7 @@ export default function LandingPage() {
                 <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">100+</h4>
                 <p className="text-[8px] font-prompt font-medium uppercase tracking-widest text-white/40">Clients</p>
               </div>
-              <div>
-                <h4 className="text-xl md:text-2xl font-bold text-brand-yellow mb-1 tracking-tight">100+</h4>
-                <p className="text-[8px] font-prompt font-medium uppercase tracking-widest text-white/40">Clients</p>
-              </div>
+              {/* Removed the duplicate 100+ Clients block here */}
             </div>
           </div>
         </div>

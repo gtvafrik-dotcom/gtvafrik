@@ -21,7 +21,17 @@ export default function NewArticle() {
   useEffect(() => {
     fetch('/api/categories')
       .then(res => res.json())
-      .then(data => setAvailableCategories(data))
+      .then(data => {
+        // Extract just the string names from the database objects
+        const fetchedNames = data.categories ? data.categories.map((c: any) => c.name) : [];
+        
+        setAvailableCategories({
+          fixed: ['News', 'Politics', 'Business', 'Sports', 'Entertainment', 'Tech'], // Your default tags
+          custom: fetchedNames.filter((name: string) => 
+            !['News', 'Politics', 'Business', 'Sports', 'Entertainment', 'Tech'].includes(name)
+          )
+        });
+      })
       .catch(err => console.error(err));
   }, []);
 

@@ -30,6 +30,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     });
   };
 
+  // Build the exact WhatsApp share text format
+  const shareText = encodeURIComponent(`${article.title} ☛ https://gtvafrik.com/blog/${article.slug}`);
+  const whatsappShareUrl = `https://wa.me/?text=${shareText}`;
+
   return (
     <div className="min-h-screen bg-white font-gudlak overflow-x-hidden selection:bg-brand-yellow selection:text-brand-dark-navy">
       <Navbar activePage="Blog" />
@@ -72,6 +76,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
           {article.excerpt && (
             <div className="text-lg md:text-xl text-gray-600 font-light leading-relaxed mb-8 border-l-4 border-brand-yellow pl-6">
+              {/* If you switch Excerpt to rich text in the admin, this will need dangerouslySetInnerHTML eventually */}
               {article.excerpt}
             </div>
           )}
@@ -81,8 +86,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {/* --- ARTICLE CONTENT --- */}
       <section className="px-6 md:px-16 pb-16">
         <div className="max-w-4xl mx-auto">
-          {/* Tiptap HTML is injected here. */}
-          {/* We use a prose class from Tailwind Typography (if available) or raw custom styling */}
           <div 
             className="prose prose-lg prose-blue max-w-none text-gray-800 leading-relaxed space-y-6 [&>img]:rounded-xl [&>img]:shadow-md [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-brand-dark-navy [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-brand-dark-navy [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-brand-dark-navy [&>ul]:list-disc [&>ul]:ml-6 [&>ol]:list-decimal [&>ol]:ml-6 [&>a]:text-brand-vibrant-blue [&>a]:underline"
             dangerouslySetInnerHTML={{ __html: article.content || '' }}
@@ -105,9 +108,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <button className="w-10 h-10 bg-brand-vibrant-blue text-white rounded-full flex items-center justify-center hover:bg-brand-dark-navy transition-colors">
                 <span className="text-sm">🔗</span>
               </button>
-              <button className="w-10 h-10 bg-brand-vibrant-blue text-white rounded-full flex items-center justify-center hover:bg-brand-dark-navy transition-colors">
+              {/* WhatsApp Share Link */}
+              <a 
+                href={whatsappShareUrl}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-[#25D366] text-white rounded-full flex items-center justify-center hover:bg-brand-dark-navy transition-colors"
+                title="Share on WhatsApp"
+              >
                 <span className="text-sm">📱</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>

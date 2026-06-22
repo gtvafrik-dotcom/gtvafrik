@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CtaBanner from "@/components/CtaBanner";
@@ -6,6 +7,49 @@ import prisma from "../../../../lib/prisma";
 import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
+
+// --- ADDED: Dynamic Metadata for WhatsApp/Social Sharing ---
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  
+  const article = await prisma.article.findUnique({
+    where: { slug },
+  });
+
+  if (!article) {
+    return { title: 'Article Not Found' };
+  }
+
+  // Fallback image just in case an article is published without a thumbnail
+  const fallbackImage = 'https://gtvafrik.com/impact.jpg'; 
+
+  return {
+    title: article.title,
+    description: article.excerpt || "Read this article on GTV Afrik",
+    openGraph: {
+      title: article.title,
+      description: article.excerpt || "Read this article on GTV Afrik",
+      url: `https://gtvafrik.com/blog/${article.slug}`,
+      siteName: 'GTV Afrik',
+      images: [
+        {
+          url: article.thumbnail || fallbackImage,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
+      type: 'article',
+      publishedTime: article.publishedAt ? article.publishedAt.toISOString() : article.createdAt.toISOString(),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt || "Read this article on GTV Afrik",
+      images: [article.thumbnail || fallbackImage],
+    },
+  };
+}
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

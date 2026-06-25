@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CtaBanner from "@/components/CtaBanner";
 import Link from "next/link";
-import prisma from '../../../../../lib/prisma';
+import prisma from '../../../../lib/prisma';
 import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';

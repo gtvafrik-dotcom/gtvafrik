@@ -424,7 +424,7 @@ export default function LandingPage() {
               return (
                 <Wrapper 
                   key={i} 
-                  href={!isCal ? link.href : ""}
+                  href={!isCal ? link.href : "#"}
                   
                   data-cal-link={isCal ? "gtv-afrik-bsbmax/30min" : undefined}
                   data-cal-config={isCal ? '{"layout":"month_view"}' : undefined}

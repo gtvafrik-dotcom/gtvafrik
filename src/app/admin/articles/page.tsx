@@ -215,6 +215,14 @@ export default function ArticlesPage() {
 
               {/* Actions */}
               <div className="flex items-center gap-2 shrink-0">
+                {/* ADDED EDIT BUTTON HERE */}
+                <Link
+                  href={`/admin/articles/${article.id}/edit`}
+                  className="p-2.5 rounded-xl text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-all flex items-center justify-center"
+                  title="Edit"
+                >
+                  <PenTool className="w-4 h-4" />
+                </Link>
                 <Link
                   href={`/blog/${article.slug}`}
                   target="_blank"

@@ -24,11 +24,28 @@ export default function EditArticle() {
   const [status, setStatus] = useState('draft');
 
   useEffect(() => {
-    // Fetch available categories
+    // Safely fetch available categories and handle different response structures
     fetch('/api/categories')
       .then(res => res.json())
-      .then(data => setAvailableCategories(data))
-      .catch(err => console.error(err));
+      .then(data => {
+        if (data?.fixed || data?.custom) {
+          setAvailableCategories({ 
+            fixed: data.fixed || [], 
+            custom: data.custom || [] 
+          });
+        } else if (data?.categories) {
+          setAvailableCategories({ 
+            fixed: data.categories.map((c: any) => c.name || c), 
+            custom: [] 
+          });
+        } else if (Array.isArray(data)) {
+          setAvailableCategories({ 
+            fixed: data.map((c: any) => c.name || c), 
+            custom: [] 
+          });
+        }
+      })
+      .catch(err => console.error('Failed to load categories:', err));
       
     // Fetch article data
     fetch(`/api/articles/${id}`)
@@ -43,13 +60,12 @@ export default function EditArticle() {
           setStatus(article.status || 'draft');
           
           if (article.categories && article.categories.length > 0) {
-            setCategories(article.categories.map((c: any) => c.category.name));
+            setCategories(article.categories.map((c: any) => c.category?.name || c));
           }
         }
       })
       .catch(err => {
         console.error('Failed to load article:', err);
-        alert('Failed to load article');
       })
       .finally(() => {
         setIsLoading(false);
@@ -74,12 +90,14 @@ export default function EditArticle() {
   };
 
   const toggleCategory = (cat: string) => {
-    setCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
+    const safeCategories = categories || [];
+    setCategories(safeCategories.includes(cat) ? safeCategories.filter(c => c !== cat) : [...safeCategories, cat]);
   };
 
   const handleAddCustomCategory = () => {
-    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
-      setCategories(prev => [...prev, newCategory.trim()]);
+    const safeCategories = categories || [];
+    if (newCategory.trim() && !safeCategories.includes(newCategory.trim())) {
+      setCategories(prev => [...(prev || []), newCategory.trim()]);
       setNewCategory('');
     }
   };
@@ -107,7 +125,7 @@ export default function EditArticle() {
     }
   };
 
-  const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+  const wordCount = (content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
 
   if (isLoading) {
     return (
@@ -116,6 +134,11 @@ export default function EditArticle() {
       </div>
     );
   }
+
+  // Safe references for rendering
+  const safeFixed = availableCategories?.fixed || [];
+  const safeCustom = availableCategories?.custom || [];
+  const safeCategories = categories || [];
 
   return (
     <div className="max-w-[1200px] mx-auto">
@@ -240,13 +263,13 @@ export default function EditArticle() {
               <Tags className="w-4 h-4 text-[#2B3674]" /> Categories
             </h3>
             <div className="flex flex-wrap gap-2 mb-4">
-              {availableCategories.fixed.map(cat => (
+              {safeFixed.map(cat => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => toggleCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                    categories.includes(cat) 
+                    safeCategories.includes(cat) 
                       ? 'bg-[#111C44] text-white shadow-md shadow-[#111C44]/20' 
                       : 'bg-[#F4F7FE] text-[#2B3674] hover:bg-[#E8EDFB]'
                   }`}
@@ -257,17 +280,17 @@ export default function EditArticle() {
             </div>
 
             {/* Custom categories */}
-            {availableCategories.custom.length > 0 && (
+            {safeCustom.length > 0 && (
               <div className="mb-4">
                 <p className="text-xs text-gray-400 font-medium mb-2">Custom</p>
                 <div className="flex flex-wrap gap-2">
-                  {availableCategories.custom.map(cat => (
+                  {safeCustom.map(cat => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => toggleCategory(cat)}
                       className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                        categories.includes(cat) 
+                        safeCategories.includes(cat) 
                           ? 'bg-purple-600 text-white shadow-md' 
                           : 'bg-purple-50 text-purple-700 hover:bg-purple-100'
                       }`}
@@ -280,11 +303,11 @@ export default function EditArticle() {
             )}
 
             {/* Selected custom tags */}
-            {categories.filter(c => !availableCategories.fixed.includes(c) && !availableCategories.custom.includes(c)).length > 0 && (
+            {safeCategories.filter(c => !safeFixed.includes(c) && !safeCustom.includes(c)).length > 0 && (
               <div className="mb-4">
                 <p className="text-xs text-gray-400 font-medium mb-2">New tags</p>
                 <div className="flex flex-wrap gap-2">
-                  {categories.filter(c => !availableCategories.fixed.includes(c) && !availableCategories.custom.includes(c)).map(cat => (
+                  {safeCategories.filter(c => !safeFixed.includes(c) && !safeCustom.includes(c)).map(cat => (
                     <button key={cat} type="button" onClick={() => toggleCategory(cat)} className="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition-all">
                       {cat} ×
                     </button>

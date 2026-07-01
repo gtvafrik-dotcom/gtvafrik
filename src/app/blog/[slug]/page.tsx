@@ -54,6 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
+  // 1. Fetch the main article
   const article = await prisma.article.findUnique({
     where: { slug },
     include: { author: true, categories: { include: { category: true } } }
@@ -61,6 +62,27 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   if (!article) {
     notFound();
+  }
+
+  // 2. Fetch Related Articles based on the primary category
+  let relatedArticles: any[] = [];
+  const primaryCategoryId = article.categories[0]?.categoryId;
+
+  if (primaryCategoryId) {
+    relatedArticles = await prisma.article.findMany({
+      where: {
+        status: 'published',
+        id: { not: article.id }, // Don't recommend the article they are currently reading
+        categories: {
+          some: {
+            categoryId: primaryCategoryId
+          }
+        }
+      },
+      include: { categories: { include: { category: true } } },
+      take: 3, // Only show 3 related articles
+      orderBy: { publishedAt: 'desc' }
+    });
   }
 
   const formatDate = (dateString: Date | null) => {
@@ -72,6 +94,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const formatShortDate = (dateString: Date | null) => {
+    if (!dateString) return '';
+    return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(dateString));
   };
 
   // Build the exact Share Links
@@ -139,8 +166,45 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      {/* --- ARTICLE FOOTER --- */}
-      <section className="px-6 md:px-16 py-12 bg-[#F8F9FF]">
+      {/* --- RELATED STORIES --- */}
+      {relatedArticles.length > 0 && (
+        <section className="px-6 md:px-16 py-12 md:py-16 bg-[#F8F9FA] border-t border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2">
+                <div className="w-[3px] h-4 bg-brand-yellow"></div>
+                <h2 className="font-bold uppercase tracking-[0.15em] text-[11px] text-brand-dark-navy">Related Stories</h2>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedArticles.map((relatedArticle: any) => (
+                <Link key={relatedArticle.id} href={`/blog/${relatedArticle.slug}`} className="group block">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-4 shadow-sm">
+                    {relatedArticle.thumbnail ? (
+                      <img src={relatedArticle.thumbnail} alt={relatedArticle.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="absolute inset-0 w-full h-full bg-brand-vibrant-blue group-hover:scale-105 transition-transform duration-500"></div>
+                    )}
+                    <div className="absolute top-3 left-3 bg-brand-yellow text-brand-dark-navy px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider z-10 shadow-sm">
+                      {relatedArticle.categories[0]?.category.name || 'Article'}
+                    </div>
+                  </div>
+                  <h3 className="text-[15px] font-bold text-brand-dark-navy leading-snug mb-2 group-hover:text-brand-vibrant-blue transition-colors line-clamp-2">
+                    {relatedArticle.title}
+                  </h3>
+                  <p className="text-[10px] font-prompt text-gray-500 uppercase tracking-widest font-medium">
+                    {formatShortDate(relatedArticle.publishedAt || relatedArticle.createdAt)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --- SHARE FOOTER --- */}
+      <section className="px-6 md:px-16 py-12 bg-[#F8F9FF] border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
